@@ -28,4 +28,4 @@ class clientData{
 
 }
 export default new clientData(); 
-    
+

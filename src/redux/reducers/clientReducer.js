@@ -1,6 +1,6 @@
 import * as ActionTypes from '../actionTypes';
 
-const reducer  = (state = {
+export const Clients  = (state = {
     errMess: null,
     clients: [],
     }, action) =>{
@@ -30,6 +30,3 @@ const reducer  = (state = {
             return state.clients;
     }
 };
-
-
-export default reducer;
