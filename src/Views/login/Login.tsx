@@ -11,7 +11,7 @@ interface Details{
     password: string;
 }
 
-function loginClient(password: string,dispatch: Dispatch<any>, email?: string, telNumber?: string) {
+function loginClient(password: string, email?: string, telNumber?: string) {
     if(!telNumber){
         telNumber = "";
     }
@@ -33,18 +33,6 @@ function loginClient(password: string,dispatch: Dispatch<any>, email?: string, t
             "Content-Type": "application/json",
         }
     });
-    
-    /*
-    if(result.data.errors){
-        alert(result.data.errors[0].message);
-        dispatch(loginFail);
-    }else{
-        console.log(result.data.data.login.token);
-        dispatch(loginSucess(result.data.data.login.token));
-        let navigate = useNavigate();
-        navigate("/home");
-    }
-    */
 }
 
 
@@ -57,7 +45,7 @@ const Login: React.FC = () => {
     const submitHandler = (event: React.FormEvent) => {
         event.preventDefault();
         const { email, password } = details;
-        loginClient(password, dispatch,email).then(result => {
+        loginClient(password,email).then(result => {
             if(result.data.errors){
                 alert(result.data.errors[0].message);
                 dispatch(loginFail);
