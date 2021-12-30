@@ -1,6 +1,5 @@
 import React , {Component} from "react";
-import { connect } from "react-redux";
-import {fetchClient} from "../redux/actionCreators";
+import { Button } from 'react-bootstrap';
 
 class CreateClient extends Component{
     constructor(props){
@@ -12,7 +11,7 @@ class CreateClient extends Component{
         this.onChangeEmail = this.onChangeEmail.bind(this);
         this.onChangeNumber = this.onChangeNumber.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.createClient = this.createClient.bind(this);
+        this.addClient = this.addClient.bind(this);
 
         this.state = {
             id:null,
@@ -26,6 +25,12 @@ class CreateClient extends Component{
             image: "",
             submitted : false
         };
+    }
+
+    componentDidMount(){
+        //var clients = this.props.fetchClients();
+        console.log("Se montó el componente de crear cliente")
+
     }
 
     onChangefName(e){
@@ -64,22 +69,24 @@ class CreateClient extends Component{
         });
     }
 
-    createClient(){
+    addClient(){
+        console.log("se Hace click en el boton perruno")
         const client =  {
             fname : this.state.fName,
             sName : this.state.sName,
             sureName : this.state.sureName,
-            active :this.state.active,
-            email : this.state.active,
+            active : 1,
+            email : this.state.email,
             telNumber : this.state.telNumber,
             password : this.state.password,
-            image : this.state.image
+            image :  "image"
         };
+        console.log(client);
 
-        this.props.createClient(client).then((data) =>{
+        this.props.addClient(client).then((data) =>{
             this.setState({
                 id: data.idClient,
-                fname: data.fName,
+                fName: data.fName,
                 sName : data.sName,
                 sureName : data.sureName,
                 active : data.active,
@@ -87,7 +94,7 @@ class CreateClient extends Component{
                 telNumber : data.telNumber,
                 password : data.password,
                 image : data.image,
-
+                
                 submitted : true
             });
             console.log(data);
@@ -143,9 +150,9 @@ class CreateClient extends Component{
                             onChange={this.onChangePassword} name="password" />
                         </div>
 
-                        <button onClick={this.createClient} className="btn btn-succes">
+                        <Button onClick={this.addClient} className="btn btn-succes">
                             Create Account
-                        </button>
+                        </Button>
                     </div>
                 )}
             </div>
@@ -154,4 +161,4 @@ class CreateClient extends Component{
 }
 
 
-export default connect(null, {CreateClient})(newClient)
+export default CreateClient;

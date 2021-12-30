@@ -1,8 +1,9 @@
-import { Routes, Route, Redirect, withRouter } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter} from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Component } from 'react';
 import { TransitionGroup} from 'react-transition-group';
 import CreateClient from '../components/CreateClientComponent';
+import {addClient, fetchClient, fetchClients, fetchCardsClient, updateClient, deleteClient} from '../redux/actionCreators';
 
 const mapStateToProps = state => {
     return{
@@ -14,7 +15,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = (dispatch) => ({
     addClient: (client) => dispatch(addClient(client)),
     fetchClients: () => {dispatch(fetchClients())},
-    fetchClient: () => {dispatch(fetchClient())},
+    fetchClient: (id) => {dispatch(fetchClient(id))},
     fetchCardsClient: (id) => {dispatch(fetchCardsClient(id))},
     updateClient: (id, client) => dispatch(updateClient(id,client)),
     deleteClient: (id) => dispatch(deleteClient(id))
@@ -32,14 +33,20 @@ class Main extends Component{
             );
         }
 
+        const AddClientElement = () => {
+            return(
+                <CreateClient addClient={this.props.addClient} fetchClients={this.props.fetchClients} />
+            );
+        };
+
         return(
             <div>
                 <TransitionGroup>
-                    <Routes>
-                        <Route path='/home' element={HomePage} />
-                        <Route path="/client" element={CreateClient}/>
+                    <Switch>
+                        <Route path='/home' component={HomePage} />
+                        <Route path="/client" component={AddClientElement}/>
                         <Redirect to="/home" />
-                    </Routes>
+                    </Switch>
                 </TransitionGroup>
             </div>
         );

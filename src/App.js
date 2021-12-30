@@ -1,13 +1,27 @@
 import './App.css';
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React, { Component } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
-import {ConfigureStore} from './redux/ConfigureStore'
+import {ConfigureStore} from './redux/ConfigureStore';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import Main from './components/MainComponent';
+
 
 const store =  ConfigureStore();
 
-function App() {
-  return(<h1>Hola mundo</h1>);
+class App extends Component{
+  render(){
+    return(
+      <Provider store={store}>
+        <BrowserRouter>
+          <div>
+            <Main/>
+          </div>
+        </BrowserRouter>
+      </Provider>
+    );
+  }
 }
+
 
 export default App;

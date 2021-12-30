@@ -9,17 +9,11 @@ export const Clients  = (state = {
             var client = action.payload;    
             return {...state, clients:state.clients.concat(client)};
         case ActionTypes.DELETE_CLIENT:
-            return clients.filter(({id}) => id !== payload.id);
+            return {...state ,state :state.clients.filter((id) => id !== action.payload)};
         case ActionTypes.GET_CLIENT:
             return state;
         case ActionTypes.UPDATE_CLIENT:
-            return clients.map((client) => {
-                if (client.id === payload.id){
-                    return{...client, ...payload,};
-                }else{
-                    return client;
-                }
-            });
+            return state;
         case ActionTypes.CLIENT_LOADING:
             return {...state, isLoading: true, errMess: null, clients: []};
         case ActionTypes.CLIENT_FAIL:

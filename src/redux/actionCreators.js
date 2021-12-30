@@ -46,6 +46,7 @@ export const addClient = (client) => async (dispatch) => {
             type: ActionTypes.ADD_CLIENT,
             payload: res.data,
         });
+        console.log(res.data);
         return Promise.resolve(res.data);
     }catch (err){
         return Promise.reject(err);
@@ -57,7 +58,7 @@ export const updateClient = (id, client) => async (dispatch) => {
         const res  = await clientData.updateClient(client, id);
         dispatch({
             type: ActionTypes.UPDATE_CLIENT,
-            payload: res.data,
+            payload: res.status,
         });
         return Promise.resolve(res.data);
     }catch (err){
