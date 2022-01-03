@@ -2,7 +2,6 @@ import React, { Dispatch } from "react";
 import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { selectToken , selectIsLoggedIn} from "../../store"
 import { useDispatch } from "react-redux";
 import {loginFail, loginSucess} from "../../features/authSlice"
 
@@ -56,8 +55,6 @@ const Login: React.FC = () => {
             }
         });
     }
-      
-    
 	return (
 		<div>
             <form onSubmit={submitHandler} >
