@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./views/App/App";
+import App from "@/Views/App/App";
 import { client } from "./graphql/server";
 import { ApolloProvider } from "@apollo/client";
 import { Provider } from "react-redux";
