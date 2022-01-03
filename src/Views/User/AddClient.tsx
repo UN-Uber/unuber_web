@@ -145,6 +145,7 @@ const AddClient: React.FC = () => {
     return(
         <div className="submit-form">
                 <div>
+                    <h1>New User Registration</h1>
                     <div className="form-group">
                         <label htmlFor="fName">First Name *</label>
                         <input type="text" className="form-control" id="fname" required value={client.fName}
@@ -238,7 +239,7 @@ const AddClient: React.FC = () => {
                             <Container>
                                     <Image src="https://bestanimations.com/Science/Gears/gears-animated.gif"/>
                             </Container>
-                        ): <div>Accept to load your data</div> }
+                        ): <div>Click to load your data</div> }
                     </div>
                 </div>
         </div>
