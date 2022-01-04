@@ -1,7 +1,8 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
-import { useState } from "react";
 import { Button } from "react-bootstrap";
+import {useSelector} from 'react-redux';
+import { RootState } from "@/store";
 
 interface User{
     fName : string;
@@ -11,7 +12,7 @@ interface User{
     email : string;
     telNumber : string;
     password : string;
-    image : 'http://cdn.onlinewebfonts.com/svg/img_184513.png';
+    image : string;
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app/auth";
@@ -42,13 +43,24 @@ function fetchClient(id:number, token:string){
     })
 }
 
-const ViewData:React.FC = (props) =>{
+const ViewData:React.FC = () =>{
 
-    const id = 5;
-    const token = "fdsdf";
-    var client:User;
+    var token = useSelector((state:RootState) => state.auth.user) as string;
+    var id = useSelector((state:RootState) => state.auth.id);
+    const [client, setClient] = useState<User>({
+        fName: "",
+        sName: "",
+        sureName: "",
+        active: 1,
+        email: "",
+        telNumber: "",
+        password:"",
+        image: 'http://cdn.onlinewebfonts.com/svg/img_184513.png'
+    })
 
     useEffect(()=>{
+        console.log('token  ', token);  
+        console.log('id   ', id);
         fetchClient(id,token).then((data)=>{
             let clientFe = data.data.data.getClient;
             client.fName = clientFe.fName;
@@ -70,7 +82,7 @@ const ViewData:React.FC = (props) =>{
             <div className="container">
                 <div className="row">
                     <div className="col-md">
-                        <h3>First Name</h3>
+                        <h3>{client.fName}</h3>
                     </div>
                     <div className="col-md">
                         <p>Aqui va el nombre</p>

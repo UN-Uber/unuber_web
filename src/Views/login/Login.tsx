@@ -92,7 +92,7 @@ const Login: React.FC = () => {
             }else{
                 localStorage.setItem("token", result.data.data.login.token);
                 dispatch(loginSucess({user : result.data.data.login.token}));
-                navigate("/home");
+                navigate("/viewData");
             }
         });
     }
