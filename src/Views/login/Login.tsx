@@ -3,9 +3,10 @@ import { useUpdateEffect } from "react-use";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {loginFail, loginSucess} from "@/features/authSlice"
+import {loginFail, loginSucess, Token} from "@/features/authSlice"
 import validator from 'validator'
 import { Container } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
 
 interface Details{
     field: string;
@@ -91,7 +92,7 @@ const Login: React.FC = () => {
                 dispatch(loginFail);
             }else{
                 localStorage.setItem("token", result.data.data.login.token);
-                dispatch(loginSucess({user : result.data.data.login.token}));
+                dispatch(loginSucess({user : result.data.data.login.token, id: jwt_decode<Token>(result.data.data.login.token).id}));
                 navigate("/home");
             }
         });
