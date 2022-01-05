@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Home from '../home/Home';
-import Login from '../login/Login';
-import AddClient from '../User/AddClient';
-import ViewData from '../User/ViewData';
+import Home from '@/Views/home/Home';
+import Login from '@/Views/login/Login';
+import AddClient from '@/Views/User/AddClient';
 
 function App() {
 

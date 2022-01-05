@@ -13,3 +13,4 @@ export type AppDispatch = typeof store.dispatch;
 
 export const selectToken = (state: RootState) => state.auth.user;
 export const selectIsLoggedIn = (state: RootState) => state.auth.isLoggedIn;
+export const selectId = (state: RootState) => state.auth.id;
