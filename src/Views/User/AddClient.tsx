@@ -1,8 +1,7 @@
 import React, { useEffect, useReducer } from "react";
 import { useState } from "react";
 import axios from "axios";
-import { Route, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Button, Container, Image } from 'react-bootstrap';
 
 interface UserCreate{
@@ -27,7 +26,7 @@ const heroku = "https://unuberaccount.herokuapp.com/api";
 const apilocal =  "http://localhost:4000/auth" 
 
 function createClient(client:UserCreate){
-    return axios.post(uriGraphql,{
+    return axios.post(apilocal,{
         query: `mutation Mutation($client: ClientInput!) {
             createClient(client: $client) {
             response
@@ -53,8 +52,6 @@ function createClient(client:UserCreate){
 }
 
 const AddClient: React.FC = () => {
-    
-    let dispatch = useDispatch();
     let navigate = useNavigate();
 
     const [client, setClient] = useState<UserCreate>({ 

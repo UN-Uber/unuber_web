@@ -3,6 +3,7 @@ import Home from '../home/Home';
 import Login from '../login/Login';
 import AddClient from '../User/AddClient';
 import ViewData from '../User/ViewData';
+import EditData from '../User/EditData';
 
 function App() {
 
@@ -13,6 +14,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/addUser" element={<AddClient />} />
             <Route path="/viewData" element={<ViewData />} />
+            <Route path="/editData" element={<EditData />} />
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
     </BrowserRouter>
