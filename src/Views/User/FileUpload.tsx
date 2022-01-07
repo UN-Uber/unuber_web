@@ -1,5 +1,5 @@
 import React from "react";
-import {useMutation , gql, Context} from "@apollo/client";
+import {useMutation , gql} from "@apollo/client";
 
 
 const UPLOAD_FILE = gql ` mutation UploadFile($file: Upload!) {

@@ -268,7 +268,8 @@ const EditData:React.FC = () =>{
     }
 
     return(
-        <div>
+        <div>{client.active===1?(
+            <div>
             {!status.loading?(
             <div className="container">
                 <div className="row">    
@@ -379,7 +380,7 @@ const EditData:React.FC = () =>{
                         <div>
                             <div>
                                 {testPasswords()?(
-                                    <Button type="button" className="btn btn-succes col-lg" onClick={chPassword}>Change Password</Button>
+                                    <Button type="button" className="btn btn-succes col-lg" onClick={chPassword}>Change Password and data</Button>
                                 ):""}
                             </div>
                         <Button type="button" className="btn btn-danger col-lg" onClick={cancelPassword}>Cancel</Button>
@@ -419,7 +420,14 @@ const EditData:React.FC = () =>{
                     
                 </div>
             )}
-        </div>    
+        </div>
+        ):(
+            <>
+            <h1>User has desactive the account, please go to th following link: </h1>
+            <h2><a href="https://i.pinimg.com/736x/58/e2/8f/58e28fae02def3695760602649056285.jpg"> Restore Account</a></h2>
+            </>
+        )}</div>
+            
     );
 }
 
