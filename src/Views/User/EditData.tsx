@@ -4,6 +4,7 @@ import { Button, Container } from "react-bootstrap";
 import {useSelector} from 'react-redux';
 import { RootState } from "@/store";
 import {useNavigate} from 'react-router-dom';
+import FileUpload from "@/Views/User/FileUpload";
 
 interface User{
     id: number
@@ -25,6 +26,8 @@ interface Loading{
     theError: any;
     password: boolean;
     image: boolean;
+    loadImage: boolean;
+    loadedImage: boolean;
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app";
@@ -72,7 +75,7 @@ function updateClient(id:number, token:string, client:User){
                 email: `${client.email}`,
                 telNumber: `${client.telNumber}`,
                 password: `${client.password}`,
-                image: "http://cdn.onlinewebfonts.com/svg/img_184513.png"
+                image: `${client.image}`,
     }
         },
     }, {
@@ -119,7 +122,7 @@ const EditData:React.FC = () =>{
 
     var token = useSelector((state:RootState) => state.auth.user) as string;
     var id = useSelector((state:RootState) => state.auth.id);
-    const [status, setStatus] = useState<Loading>({loading : true, theError : [], password: false, image: false})
+    const [status, setStatus] = useState<Loading>({loading : true, theError : [], password: false, image: false, loadImage:false, loadedImage:false})
     const [client, setClient] = useState<User>({
         id: 0,
         fName: "",
@@ -132,7 +135,7 @@ const EditData:React.FC = () =>{
         newPassword: "",
         reNewPassword: "",
         image: 'http://cdn.onlinewebfonts.com/svg/img_184513.png'
-    })
+    });
 
     useEffect(()=>{
         fetchClient(id,token).then((data)=>{
@@ -144,7 +147,6 @@ const EditData:React.FC = () =>{
             client.telNumber = clientFe.telNumber;
             client.image = clientFe.image;
             setStatus({ ...status , loading :false});
-            
         })
         }, []);
 
@@ -255,6 +257,14 @@ const EditData:React.FC = () =>{
 
     function testPasswords():boolean{
         return(!checkPass() && !checkRePass());
+    }
+
+    const setImageUrl = (url:string) => {
+        console.log("imagen desde el lado de la edicion de datos:  ", client.image);
+        client.image= `${url}`;
+        console.log("Se esta llamando la función");
+        console.log("imagen desde el lado de la edicion de datos:  ", client.image);
+        setStatus({...status, image:!(status.image)});
     }
 
     return(
@@ -390,18 +400,12 @@ const EditData:React.FC = () =>{
                     <img src={client.image} alt="User image" className="img-thumbnail" />
                 </div>
                 <div className="container">
-                    <Button type="button" className="btn btn-warning col-lg" onChange={changeImageBu}>Change Picture</Button>
+                    <Button type="button" className="btn btn-warning col-lg" onClick={changeImageBu}>Change Picture</Button>
                 </div>
                 </div>
             ):(
-                Espacio para subir la imagen
+                <FileUpload token={token} setImageUrl={setImageUrl} />
             )}</div>
-            <div className="container">
-                <img src={client.image} alt="User image" className="img-thumbnail" />
-            </div>
-            <div className="container">
-                <Button type="button" className="btn btn-warning col-lg" onChange={changeImageBu}>Change Picture</Button>
-            </div>
             </div>
         </div>
         </div>
