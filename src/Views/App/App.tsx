@@ -4,6 +4,7 @@ import Login from '@/Views/login/Login';
 import AddClient from '../User/AddClient';
 import ViewData from '../User/ViewData'; 
 import EditData from '../User/EditData';
+import AddCreditCard from '../creditCard/AddCreditCard';
 
 function App() {
 
@@ -15,6 +16,7 @@ function App() {
             <Route path="/addUser" element={<AddClient />} />
             <Route path="/viewData" element={<ViewData />} />
             <Route path="/editData" element={<EditData />} />
+            <Route path="/addCreditCard" element={<AddCreditCard />} />
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
     </BrowserRouter>
