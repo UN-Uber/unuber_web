@@ -124,7 +124,6 @@ const Login: React.FC = () => {
                             margin="normal"
                             required
                             fullWidth
-                            type="email"
                             label="Correo electrónico o número de teléfono"
                             variant="outlined"
                             onChange={e => setDetails({...details, field: e.target.value})}
