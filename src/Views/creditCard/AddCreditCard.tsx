@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import  TextField  from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import './AddClientCard.css'
 
 interface CreditCardCreate{
     cardNumber: string,
