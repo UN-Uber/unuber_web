@@ -5,9 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import {loginFail, loginSucess, Token} from "@/features/authSlice"
 import validator from 'validator'
-import { Container } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
-
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Logo from '../../assets/logo.png';
+import './Login.css';
 interface Details{
     field: string;
     password: string;
@@ -40,7 +46,6 @@ function loginClient(password: string, email?: string, telNumber?: string) {
     });
 }
 
-
 const Login: React.FC = () => {
 
     function checkEmail(email: string):boolean{
@@ -53,24 +58,7 @@ const Login: React.FC = () => {
 
     function checkPassword(password: string):boolean{
         return validator.isLength(password, {min: 8, max: 15});
-    }
-
-    function popUpEmailOrPhone(){
-            return (
-                <Container>
-                    <p>Email or Phone Number not Valid</p>
-                </Container>
-            )
-    }
-
-    function popUpPassword(){
-            return (
-                <Container>
-                    <p>Password must contain between 8 and 15 characters</p>
-                </Container>
-            )
-    }
-    
+    }    
     
     const [details, setDetails] = useState<Details>({field:"", password:""});
     const [formValidationError, setFormValidationError] = useState<FormErrors>({emailOrTelNumber: false, password: false, submit: false});	
@@ -93,11 +81,10 @@ const Login: React.FC = () => {
             }else{
                 localStorage.setItem("token", result.data.data.login.token);
                 dispatch(loginSucess({user : result.data.data.login.token, id: jwt_decode<Token>(result.data.data.login.token).id}));
-                navigate("/home");
+                navigate("/viewData");
             }
         });
     }
-
 
     useUpdateEffect(() => {
         if (!checkEmail(details.field) && !checkPhoneNumber(details.field)) {
@@ -106,8 +93,6 @@ const Login: React.FC = () => {
             setFormValidationError({...formValidationError,emailOrTelNumber: false});
         }
     }, [details.field]);
-
-    
 
     useUpdateEffect(() => {
         if (!checkPassword(details.password)) {
@@ -119,22 +104,67 @@ const Login: React.FC = () => {
 
 
 	return (
-		<div>
-            <form onSubmit={submitHandler} >
-                <h2>Login</h2>
-                <div className="form-group">
-                    <label htmlFor="EmailorNumber">Email address or Phone Number</label>
-                    <input type="text" name="field" id="email" onChange={e => setDetails({...details, field: e.target.value})}  value={details.field}/>
-                </div>
-                {formValidationError.emailOrTelNumber ? popUpEmailOrPhone() : ""}
-                <div className="form-group">
-                    <label htmlFor="Password">Password</label>
-                    <input type="password" name="password" id="password" onChange={e =>  setDetails({...details, password: e.target.value})} value={details.password}/>
-                </div>
-                {formValidationError.password? popUpPassword(): ""}
-                <button type="submit" disabled = {formValidationError.emailOrTelNumber || formValidationError.password}>Login</button>
-            </form>
-        </div>
+        <>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >   
+                    <img src={Logo} />
+                    <Typography component="h1" variant="h5">
+                        Iniciar sesión
+                    </Typography>
+                    <Box component="form" onSubmit={submitHandler} sx={{ mt: 1 }}>
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            type="email"
+                            label="Correo electrónico o número de teléfono"
+                            variant="outlined"
+                            onChange={e => setDetails({...details, field: e.target.value})}
+                            error={formValidationError.emailOrTelNumber}
+                            helperText={
+                                formValidationError.emailOrTelNumber
+                                ? "El correo o el número de teléfono no es válido"
+                                : ""
+                            }
+                        />
+
+                        <TextField
+                            margin="normal"
+                            required
+                            fullWidth
+                            type="password"
+                            label="Contraseña"
+                            variant="outlined"
+                            onChange={e =>  setDetails({...details, password: e.target.value})}
+                            error={formValidationError.password}
+                            helperText={
+                                formValidationError.password
+                                ? "La contraseña debe tener entre 8 y 15 caracteres"
+                                : ""
+                            }
+                        />
+
+                        <Button 
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                            disabled = {formValidationError.emailOrTelNumber || formValidationError.password}
+                        >
+                            Iniciar sesión
+                        </Button>
+                    </Box>
+                </Box>
+            </Container>
+        </>
 	);
 };
 

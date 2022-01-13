@@ -1,9 +1,13 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useEffect, useState} from "react";
 import axios from "axios";
-import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
+import {useSelector} from 'react-redux';
+import { RootState } from "@/store";
+import {useNavigate} from 'react-router-dom';
+import DeleteAccount from '../User/DeleteAccount';
 
 interface User{
+    idClient : number;
     fName : string;
     sName : string;
     sureName : string;
@@ -11,13 +15,21 @@ interface User{
     email : string;
     telNumber : string;
     password : string;
-    image : 'http://cdn.onlinewebfonts.com/svg/img_184513.png';
+    image : string;
 }
 
-const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app/auth";
+
+interface Loading{
+    loading: boolean;
+    theError: any;
+    delete: boolean;
+}
+
+const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app";
+const apilocal =  "http://localhost:4000";
 
 function fetchClient(id:number, token:string){
-    return axios.post(uriGraphql, {
+    return axios.post(apilocal, {
         query:` query GetClient($idClient: Int) {
                 getClient(idClient: $idClient) {
                 idClient
@@ -32,94 +44,159 @@ function fetchClient(id:number, token:string){
             }
         } `,
         variables:{
-            idClient: `${id}`
+            idClient: id
         },
     }, {
         headers:{
             'Content-Type': 'application/json',
-            'Authorization' : `${token}`
+            'Authorization': `${token}`
         }
-    })
+    }).catch(error => console.log(error)
+        );
 }
 
-const ViewData:React.FC = (props) =>{
+const ViewData:React.FC = () =>{
 
-    const id = 5;
-    const token = "fdsdf";
-    var client:User;
+    let navigate = useNavigate();
+
+    var token = useSelector((state:RootState) => state.auth.user) as string;
+    var id = useSelector((state:RootState) => state.auth.id);
+    const [status, setStatus] = useState<Loading>({loading : true, theError : [], delete:false})
+    const [client, setClient] = useState<User>({
+        idClient: 0,
+        fName: "",
+        sName: "",
+        sureName: "",
+        active: 1,
+        email: "",
+        telNumber: "",
+        password:"",
+        image: 'http://cdn.onlinewebfonts.com/svg/img_184513.png'
+    })
 
     useEffect(()=>{
         fetchClient(id,token).then((data)=>{
-            let clientFe = data.data.data.getClient;
+            var clientFe = data.data.data.getClient;
+            client.idClient = clientFe.idClient;
             client.fName = clientFe.fName;
             client.sName = clientFe.sName;
             client.sureName = clientFe.sureName;
             client.email = clientFe.email;
             client.telNumber = clientFe.telNumber;
             client.image = clientFe.image;
+            client.active = clientFe.active;
+            setStatus({ ...status , loading :false});
         })
         }, []);
 
-    function change(){
-        console.log("se modifica");
+    function editData(){
+        navigate('/editData');
     }
 
+    function goOut(){
+        navigate("/login");
+    }
+
+    function deleteAccount(){
+        setStatus({...status, delete:true});
+    }
+
+    function goBackDelete(){
+        setStatus({...status, delete: !status.delete});
+    }
     return(
-        <div>
-            <h1>User Data</h1>
+        <div>{(client.active === 1)?(
+            <div>{!status.delete?(
+                <div>
+                {!status.loading?(
+                <div className="container">
+                    <div className="row">    
+                    <div className="col-6" > 
+                    <h1>User Data</h1>
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md">
+                                <h3>Name</h3>
+                            </div>
+                            <div className="col-md">
+                                <p>{client.fName}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md">
+                                <h3>Second name</h3>
+                            </div>
+                            <div className="col-md">
+                                <p>{client.sName}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md">
+                                <h3>Sure name</h3>
+                            </div>
+                            <div className="col-md">
+                                <p>{client.sureName}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md">
+                                <h3>email</h3>
+                            </div>
+                            <div className="col-md">
+                                <p>{client.email}</p>
+                            </div>
+                        </div>
+                        <div className="row">
+                            <div className="col-md">
+                                <h3>Tel number</h3>
+                            </div>
+                            <div className="col-md">
+                                <p>{client.telNumber}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="btn-group" role="group" aria-label="Actions">
+                        <Button type="button" className="btn btn-success col-lg " onClick={editData}>Modify Data</Button>
+                        <Button type="button" className="btn btn-secondary col-lg" onClick={goOut}>Go out</Button>
+                        <Button type="button" className="btn btn-danger col-lg" onClick={deleteAccount}>Delete Account</Button>
+                    </div>
+            </div>
+            <div className="col-6">
+                <h2>User image</h2>
+                <div className="container">
+                    <img src={client.image} alt="User image" className="img-thumbnail" />
+                </div>
+                </div>
+            </div>
+            </div>
+                )
+                :(
+                    <div>
+                        <Container>
+                            <h1>We are working</h1>
+                            <img src="https://bestanimations.com/Science/Gears/gears-animated.gif" alt="Estamos cargando la infomración" />
+                        </Container>
+                        
+                    </div>
+                )}
+            </div>
+            ):(
+                <div className="container">
+                    <DeleteAccount token={token} client={client} goBackDelete={goBackDelete} />
+                </div>
+            )}
+            </div> 
+        ):(
+            <>
+            <h1>User has desactive the account, please go to th following link: </h1>
+            <h2><a href="https://i.pinimg.com/736x/58/e2/8f/58e28fae02def3695760602649056285.jpg"> Restore Account</a></h2>
             <div className="container">
-                <div className="row">
-                    <div className="col-md">
-                        <h3>First Name</h3>
-                    </div>
-                    <div className="col-md">
-                        <p>Aqui va el nombre</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md">
-                        <h3>Second name</h3>
-                    </div>
-                    <div className="col-md">
-                        <p>Aqui va el second name</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md">
-                        <h3>Sure name</h3>
-                    </div>
-                    <div className="col-md">
-                        <p>Aqui va el apellido</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md">
-                        <h3>email</h3>
-                    </div>
-                    <div className="col-md">
-                        <p>Aqui va el email</p>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md">
-                        <h3>Tel number</h3>
-                    </div>
-                    <div className="col-md">
-                        <p>Aqui va el telefono</p>
-                    </div>
-                </div>
+                <h2>Or go back</h2>
+                <Button type="button" className="btn btn-secondary col-lg" onClick={goOut}> Go back to the login </Button>
             </div>
-            <div className="btn-group" role="group" aria-label="Actions">
-                <Button type="button" className="btn btn-success col-lg ">Modify Data</Button>
-                <Button type="button" className="btn btn-secondary col-lg">Go out</Button>
-                <Button type="button" className="btn btn-danger col-lg">Delete Account</Button>
-            </div>
-            <div className="row">
-                        <label htmlFor="fName">First Name *</label>
-                        <input type="text" className="form-control" id="fname" required
-                        onChange={change} onInput={change} name="fName" />
-            </div>
-        </div>
+            </>
+        )}
+        </div>    
     );
 }
 
