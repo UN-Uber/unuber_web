@@ -1,28 +1,31 @@
+
 .footer{
     margin-top: 1rem;
-    background-color: #64B8FF;
+    background-color: #d481cd;
     font-family: Arial, Helvetica, sans-serif;
-}
-.rigths{
+  }
+  
+  .rigths{
     min-height: 30px;
     background-color: rgb(54, 54, 54);
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
-}
-.rig{
+  }
+  .rig{
     color: white;
-}
-.element{
+  }
+  .element{
     padding-left: 15px;
     padding-right: 15px;
-}
-.links{
+  }
+  .links{
     color: black;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
-}
-.titulos_footer{
+  }
+  .titulos_footer{
     font-size: 20px;
     font-weight: 700;
-}
+  }
+  

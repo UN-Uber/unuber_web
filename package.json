@@ -12,6 +12,7 @@
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
+    "@react-google-maps/api": "^2.7.0",
     "@reduxjs/toolkit": "^1.7.1",
     "@types/material-ui": "^0.21.12",
     "apollo-upload-client": "^17.0.0",
