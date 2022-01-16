@@ -1,62 +1,34 @@
-import React, { useState } from 'react';
-import { GoogleMap, LoadScript , DirectionsService} from '@react-google-maps/api';
+import React from 'react'
+import { GoogleMap, LoadScript} from '@react-google-maps/api';
+
+const containerStyle = {
+  width: '400px',
+  height: '400px'
+};
+
+const center = {
+  lat: 4.637865,
+  lng: -74.084634
+};
+
+const options ={
+    streetViewControl: false
+};
 
 
-interface ITravel{
-    response : string | null;
-    origin: string;
-    destination: string;
-}
+const Maps:React.FC = () => {
 
-
-const Maps: React.FC = () => {
-    
-    const [travel, setTravel] = useState<ITravel>({
-        response : null, origin : '' ,destination : ''
-    })
-
-    /*
-    const directionCallBack = (response) => {
-        console.log(response);
+    function onLoad(){
+        console.log("Se ha cargado el hp mapa");
     }
 
-    const onClick = (origin:string, destination:string) => {
-        if (travel.origin !== '' && travel.destination !== '') {
-            setTravel({...travel,  })
-            }
-    }
-
-    const onMapClick =  (args) => {
-        console.log('onClick args: ', args)
-    }*/
-
-
-    return (
-        <div>
-            <div> Map Selector</div>
-            <div className='row'>
-                <div className='col-md-6 col-lg-4'>
-                    <div className='form-group'>
-                        <label htmlFor="ORIGIN">Origin</label> <br/>
-                        <input type="text" className='form-control' id='ORIGIN' value={travel.origin} />
-                    </div>
-                </div>
-
-                <div className='col-md-6 col-lg-4'>
-                    <div className='form-group'>
-                        <label htmlFor='DESTINATION'>Destination</label><br/>
-                        <input id='DESTINATION' className='form-control' type='text' value={travel.destination}/>
-                    </div>
-                </div>
-            </div> 
-
-
-            <LoadScript googleMapsApiKey='AIzaSyByZ4vjE0H-WVKko4mDSSUPgmS4Ez5jSQ4'>
-                <GoogleMap zoom={25} id='service' options={{streetViewControl: false}}  mapContainerStyle={{height: '400px',width: '35%'}} center={{lat: 4.637865,lng: -74.084634}}> 
-                </GoogleMap>
-            </LoadScript> 
-        </div>
-    );
+    return(
+        <LoadScript googleMapsApiKey="AIzaSyDPCiexFmQYEsMsRne5RlWnNQ0qgABxBWk">
+            <GoogleMap options={options} onLoad={onLoad} mapContainerStyle={containerStyle} center={center} zoom={10}> 
+        
+            </GoogleMap>
+        </LoadScript>
+        ); 
 }
 
 export default Maps;
