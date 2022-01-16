@@ -1,6 +1,6 @@
 import React, { useEffect, useState }from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import List from '@mui/material/List';
@@ -12,7 +12,16 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Icon from '@mui/material/Icon';
 import visaIcon from '../../../assets/visa_icon.png';
 import mastercardIcon from '../../../assets/mastercard_icon.png';
+import PaymentsIcon from '@mui/icons-material/Payments';
+import { green, grey } from '@mui/material/colors';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
 import './ListUserCreditCards.css';
+import CreditCardInfo from "../CreditCardInfo";
 
 interface CreditCard{
     idCard: number,
@@ -102,23 +111,101 @@ const GetCreditCards: React.FC = () => {
     
 
     return (
-        <>        
-            <List>
-                {cards.map((card, index) => {
-                    return (
-                        <>
-                            <ListItem key={index} onClick={() => {console.log(card.idCard)}}>
-                                <ListItemButton >
+        <>  
+            <Container component="main" maxWidth="md">
+            <CssBaseline />
+                {!status.loading
+                ?(
+                    <Box
+                        sx={{
+                            marginTop: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            position: 'relative',
+                            minHeight: 625,
+                        }}
+                    >
+                    <List>
+                        <Box 
+                            sx={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(2, 1fr)',
+                                gap: 1,
+                            }}
+                        >
+                            {cards.map((card, index) => {
+                                return (                                    
+                                    <ListItem 
+                                        key={index} 
+                                        onClick={() => {
+                                            // {state: any} permite pasar datos a otro componente
+                                            navigate("/cardDetails", {state: card});
+                                        }}
+                                        sx={{
+                                            bgcolor: "#3F3F4E",
+                                            height: 150,
+                                            color: "#FFF",
+                                            borderRadius: 4
+                                        }}
+                                    >
+                                        <ListItemButton sx={{height: 1}}>
+                                            <ListItemIcon >
+                                                {cardIcon(card.cardNumber)}
+                                            </ListItemIcon>
+                                            <ListItemText 
+                                                key={card.idCard} 
+                                                primary={card.cardNumber.match(/.{4}/g)?.join(" ")}
+                                            >
+                                            </ListItemText>
+                                        </ListItemButton>
+                                    </ListItem>                                    
+                                )
+                            })}
+
+                            <ListItem 
+                                key={"efectivo"} 
+                                sx={{
+                                    bgcolor: "#418442",
+                                    height: 150,
+                                    color: "#FFF",
+                                    borderRadius: 4,
+                                    fontWeight: '700'
+                                }}
+                            >
+                                <ListItemButton sx={{height: 1}} >
                                     <ListItemIcon >
-                                        {cardIcon(card.cardNumber)}
+                                        <PaymentsIcon sx={{ color: green[100]}}/>
                                     </ListItemIcon>
-                                    <ListItemText key={card.idCard} primary={card.cardNumber}></ListItemText>
+                                    <ListItemText primary="Efectivo"></ListItemText>
                                 </ListItemButton>
                             </ListItem>
-                        </>
-                    )
-                })}
-            </List>
+                        </Box>
+                    </List>
+                    <Fab variant="extended" color="primary"
+                        sx={{
+                            position: 'absolute',
+                            bottom: 16,
+                            right: 16,
+                        }}
+                    >
+                        <AddIcon sx={{ mr: 1 }} />
+                        Añadir tarjeta
+                    </Fab>
+                </Box>
+                    
+                )
+                :(
+                    <Box 
+                        sx={{ 
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center', 
+                        }}
+                    >
+                        <CircularProgress />
+                    </Box>
+                )}
+            </Container>
         </>
     );
 
