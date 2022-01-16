@@ -6,6 +6,7 @@ import ViewData from '../User/ViewData';
 import EditData from '../User/EditData';
 import AddCreditCard from '../creditCard/AddCreditCard';
 import UserCreditCards from '../creditCard/ListUserCreditCards/ListUserCreditCards'
+import CreditCardInfo from '../creditCard/CreditCardInfo';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/editData" element={<EditData />} />
             <Route path="/addCreditCard" element={<AddCreditCard />} />
             <Route path="/wallet" element={<UserCreditCards />}/>
+            <Route path="/cardDetails" element={<CreditCardInfo />}/>
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
     </BrowserRouter>
