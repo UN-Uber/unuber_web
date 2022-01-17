@@ -202,14 +202,14 @@ ul {
   display: grid;
   max-height: 50rem;
   max-width: 35rem;
-  margin: 64px auto 10rem;
-
+  margin: 50px auto 20rem;
+  padding-bottom: 5rem;
   justify-content: center;
   grid-template-columns: repeat(2, 1fr);
   grid-column-gap: 2rem;
 }
 
-.ima, #tituloR, #emailc, #bot  {
+.ima, #vehiculos, #tituloR, #emailc, #bot, #subtitulo, #mapa, #botonx, #destino {
   grid-column: 1/3;
 }
 
@@ -250,4 +250,103 @@ ul {
   animation-name: mui-auto-fill-cancel;
   -webkit-animation-duration: 10ms;
   animation-duration: 10ms;
+}
+
+#registro .form-group p {
+  margin: 0.5rem 14px;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: #d32f2f;
+  font-family: "Roboto";
+  text-decoration:none
+}
+
+#registro #subtitulo {
+  border: solid 3px #f30000;
+  margin: 0 auto;
+  padding: .8rem 2rem;
+  font-weight: 400;
+  font-size: 1.3rem;
+  line-height: 1.334;
+  border-radius: 5rem;
+}
+
+#registro #mapa {
+  border: solid 3px #f30000;
+  margin: 1rem auto;
+  padding: 5rem 17rem;
+  border-radius: 2rem;
+}
+
+#registro #destino {
+  display: flex;
+  border: solid 3px #f30000;
+  margin: 1rem auto;
+  padding: .5rem 1rem;
+  line-height: 1.334;
+  border-radius: 5rem;
+  align-items: center;
+}
+
+#registro #destino .ima{
+  width: 2rem;
+  height: 2rem;
+  margin-left: .5rem;
+}
+
+#registro #destino input{
+
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  border: 0;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  -webkit-tap-highlight-color: transparent;
+  display: block;
+  min-width: 0;
+  width: 25rem;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding: .5rem;
+  /* margin: 1rem; */
+}
+
+#vehiculos {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 2rem;
+  grid-row-gap: 2rem;
+  margin: 1.5rem 5rem;
+}
+
+#vehiculos #vehiculo {
+  display: flex;
+  flex-direction: column;
+}
+
+#vehiculos #vehiculo h5 {
+  margin: .5rem;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.334;
+}
+
+#vehiculos #vehiculo #botonx {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.334;
+  padding: 16px;
+}
+
+#vehiculos #vehiculo #botonx .imav{
+  margin: 0;
+  width: 10rem;
+  height: 6rem;
+  /* margin-left: .5rem; */
 }

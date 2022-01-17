@@ -151,7 +151,7 @@ const AddClient: React.FC = () => {
                 <label htmlFor="fName">First Name *</label>
                 <input type="text" className="form-control" id="fname" required value={client.fName}
                 onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
-            
+
                 <div>{checkName()?(
                     <Container>
                         <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>

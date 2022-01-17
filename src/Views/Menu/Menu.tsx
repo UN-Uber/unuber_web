@@ -21,6 +21,8 @@ const Menu: React.FC = () => {
               <line x1="4" y1="12" x2="20" y2="12"></line>
               <line x1="4" y1="18" x2="20" y2="18"></line>
             </svg>
+            
+          {/*Modificacion para el tocken*/}
             <ul id="opciones" className="no-visible">
               <li id="enlaces">
                 <div id="imagen"><img src={im1} /></div>
@@ -30,15 +32,17 @@ const Menu: React.FC = () => {
                 <div id="imagen"><img src={im2} /></div>
                 <a href="/addUser">Registro</a>
               </li>
-              <li id="enlaces">
+             {/* <li id="enlaces">
                 <div id="imagen"><img src={im3} /></div>
                 <a href="/viewData">Usuario</a>
-              </li>
+              </li>*/}
               <li id="enlaces">
                 <div id="imagen"><img src={im4} /></div>
                 <a href="/login">Login</a>
               </li>
              </ul>
+             {/**/}
+
           </li>
         </ul>
        
