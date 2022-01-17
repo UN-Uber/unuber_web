@@ -14,8 +14,8 @@ const Footer: React.FC = () => {
         <div>
             <div className="footer" >
                 <div className='row'>
-                    <div className='col-sm-1 element'>
-                        <img src="https://image.winudf.com/v2/image1/aW8uaW5iLm5ldHdvcmtfaWNvbl8xNTUzNzUzNzk3XzAxOQ/icon.png?w=170&fakeurl=1" alt="Un-Uber"/  >
+                    <div className='col-sm-1 element image-footer'>
+                        <img src="https://image.winudf.com/v2/image1/aW8uaW5iLm5ldHdvcmtfaWNvbl8xNTUzNzUzNzk3XzAxOQ/icon.png?w=170&fakeurl=1" alt="Un-Uber"/ >
                     </div>
                     <div className='col-sm-4 element'>
                         <h4 className="titulos_footer" >Comunnications </h4>
