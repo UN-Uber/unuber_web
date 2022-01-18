@@ -6,6 +6,11 @@ import { RootState } from '@/store';
 import  TextField  from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import InputMask from "react-input-mask";
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
 
 interface CreditCardCreate{
     cardNumber: string,
@@ -16,6 +21,11 @@ interface CreditCardCreate{
 interface Loading{
     loading: boolean;
     theError: any;
+}
+
+interface Toast{
+    state: boolean,
+    message: string
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app/";
@@ -63,19 +73,33 @@ const AddCreditCard: React.FC = () => {
         theError: []
     });
 
+    const [toastSuccess, setToastSuccess] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+    const [toastError, setToastError] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+
     function addCreditCard(){
 
-        // TODO: Change Alerts for Material Snackbar
 
         setStatus({ ...status, loading: true});
         createCreditCard(token, id, card).then((data) => {
             setStatus({ ...status, loading: false});
             if(data.data.data.createCard.response == "Card already register"){
-                alert("La tarjeta ya está registrada");
+                setToastError({
+                    state: true,
+                    message: "La tarjeta ya está registrada"
+                });
             }
             else{
-                alert("Tarjeta registrada");
-                navigate("/wallet");
+                setToastError({
+                    state: true,
+                    message: "Tarjeta registrada"
+                });
+                setTimeout(() => navigate("/wallet"));
             }
         }).catch((e) => {
             console.log(e);
@@ -129,8 +153,21 @@ const AddCreditCard: React.FC = () => {
     }
 
     return (
-        <div className="container">
-            <form>
+        <>
+            <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography component="h1" variant="h4">
+                    Registrar tarjeta
+                </Typography>
+                <Box component="form" sx={{ mt: 5 }}>
                 <InputMask 
                     mask="9999 9999 9999 9999"
                     maskPlaceholder=" "
@@ -138,17 +175,17 @@ const AddCreditCard: React.FC = () => {
                     onChange={event => setCreditCard({...card, cardNumber: event.target.value.replaceAll(" ","")})}
                 >
                     <TextField 
-                            required
-                            fullWidth
-                            id="outlined-basic" 
-                            label="tarjeta de crédito" 
-                            variant="outlined"
-                            error={!checkCreditCardNumber()}
-                            helperText={
-                                checkCreditCardNumber()
-                                ? ""
-                                : "El número de la tarjeta no es válido"
-                            }                    
+                        required
+                        fullWidth
+                        margin="normal" 
+                        label="tarjeta de crédito" 
+                        variant="outlined"
+                        error={!checkCreditCardNumber()}
+                        helperText={
+                            checkCreditCardNumber()
+                            ? ""
+                            : "El número de la tarjeta no es válido"
+                        }               
                     />
                 </InputMask>
 
@@ -160,7 +197,8 @@ const AddCreditCard: React.FC = () => {
                 >
                     <TextField 
                         required 
-                        id="outlined-basic" 
+                        margin="normal"
+                        fullWidth 
                         label="fecha de vecimiento" 
                         variant="outlined"
                         error={!checkDueDate()}
@@ -180,7 +218,8 @@ const AddCreditCard: React.FC = () => {
                 >
                     <TextField 
                         required
-                        id="outlined-basic num" 
+                        margin="normal"
+                        fullWidth
                         label="cvv"
                         variant="outlined"
                         error={checkCvv()}
@@ -191,9 +230,31 @@ const AddCreditCard: React.FC = () => {
                         }
                     />
                 </InputMask>
-                <Button onClick={addCreditCard}>Enviar</Button>
-            </form>
-        </div>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3 }}  
+                    onClick={addCreditCard}
+                >
+                    Enviar
+                </Button>
+
+                {
+                    toastSuccess.state
+                    ? <Alert sx={{mt: 10}} variant="filled" severity="success">{toastSuccess.message}</Alert>
+                    : null
+                }
+
+                {
+                    toastError.state
+                    ? <Alert sx={{mt: 10}}variant="filled" severity="error">{toastError.message}</Alert>
+                    : null
+                }
+                </Box>
+            </Box>
+            </Container>
+        
+        </>
     );
 
 

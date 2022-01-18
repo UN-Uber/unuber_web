@@ -187,6 +187,7 @@ const GetCreditCards: React.FC = () => {
                             bottom: 16,
                             right: 16,
                         }}
+                        href="/addCreditCard"
                     >
                         <AddIcon sx={{ mr: 1 }} />
                         Añadir tarjeta
