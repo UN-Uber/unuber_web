@@ -151,7 +151,7 @@ const Login: React.FC = () => {
                             }
                         />
 
-                        <button 
+                        <Button 
                             id="botonx"
                             type="submit"
                             fullWidth
@@ -160,7 +160,7 @@ const Login: React.FC = () => {
                             disabled = {formValidationError.emailOrTelNumber || formValidationError.password}
                         >
                             Iniciar sesión
-                        </button>
+                        </Button>
                     </Box>
                 </Box>
             </Container>
