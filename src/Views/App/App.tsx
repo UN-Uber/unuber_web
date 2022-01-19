@@ -10,6 +10,7 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
 import CreditCardInfo from '../creditCard/CreditCardInfo';
+import Rating from '../Rating/rating';
 
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
             <Route path="/wallet" element={<UserCreditCards />}/>
             <Route path="/maps" element={<Maps/>} />
             <Route path="/cardDetails" element={<CreditCardInfo />}/>
+            <Route path="/rating" element={<Rating />} /> 
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       <Footer/>
