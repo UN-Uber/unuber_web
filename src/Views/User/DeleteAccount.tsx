@@ -44,7 +44,7 @@ const DeleteAccount = ({token, client, goBackDelete}) => {
     }
 
     return(
-        <div className="submit-form Delete" id="registro">
+        <div className="submit-form Delete margen" id="registro">
             
             <h1 id="tituloR">Delete Account</h1>
             <h2 id="tituloR">Are you sure?</h2>

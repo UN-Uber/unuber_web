@@ -141,7 +141,7 @@ const AddClient: React.FC = () => {
     }
 
     return(
-        <div className="submit-form" id="registro">
+        <div className="submit-form Delete" id="registro">
 
             <img className="ima" id="login-imagen" src={Logo}/>
 

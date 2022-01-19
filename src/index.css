@@ -226,6 +226,12 @@ ul {
   margin-bottom: 0 !important;
 }
 
+.margen {
+  padding: 2rem !important;
+  border: solid 3px #F30000;
+  border-radius: 5rem;
+}
+
 #cambio, .foto, .btn-group, .ima, #vehiculos, #tituloR, #emailc, #bot, #subtitulo, #mapa, #botonx, #destino {
   grid-column: 1/3;
 }
