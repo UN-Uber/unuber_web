@@ -12,7 +12,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Logo from '../../assets/logo.png';
+import Logo from '../../assets/Login.png';
 import './Login.css';
 interface Details{
     field: string;
@@ -115,7 +115,7 @@ const Login: React.FC = () => {
                         alignItems: 'center',
                     }}
                 >   
-                    <img src={Logo} />
+                    <img id="login-imagen" src={Logo} />
                     <Typography component="h1" variant="h5">
                         Iniciar sesión
                     </Typography>
@@ -151,7 +151,8 @@ const Login: React.FC = () => {
                             }
                         />
 
-                        <Button 
+                        <button 
+                            id="botonx"
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -159,7 +160,7 @@ const Login: React.FC = () => {
                             disabled = {formValidationError.emailOrTelNumber || formValidationError.password}
                         >
                             Iniciar sesión
-                        </Button>
+                        </button>
                     </Box>
                 </Box>
             </Container>

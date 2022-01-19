@@ -3,6 +3,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Button, Container, Image } from 'react-bootstrap';
+import Logo from '../../assets/Registro-Usuario.png';
 
 interface UserCreate{
     fName : string;
@@ -140,105 +141,110 @@ const AddClient: React.FC = () => {
     }
 
     return(
-        <div className="submit-form">
-                <div>
-                    <h1>New User Registration</h1>
-                    <div className="form-group">
-                        <label htmlFor="fName">First Name *</label>
-                        <input type="text" className="form-control" id="fname" required value={client.fName}
-                        onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
-                    </div>
-                    <div>{checkName()?(
-                        <Container>
-                            <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                        </Container>
-                    ):""}</div>
+        <div className="submit-form" id="registro">
 
-                    <div className="form-group">
-                        <label htmlFor="sName">Second Name</label>
-                        <input type="text" className="form-control" id="sName" value={client.sName}
-                        onChange={e => setClient({...client, sName: e.target.value})}  onInput={checkSName} name="sName" />
-                    </div>
-                    <div>{checkSName()?(
-                        <Container>
-                            <p>Second Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                        </Container>
-                    ):""}</div>
+            <img className="ima" id="login-imagen" src={Logo}/>
 
-                    <div className="form-group">
-                        <label htmlFor="sureName">Sure Name * </label>
-                        <input type="text" className="form-control" id="sureName" required value={client.sureName}
-                        onChange={e => setClient({...client, sureName: e.target.value})} onInput={checkSureN} name="sureName" />
-                    </div>
-                    <div>{!checkSureN()?(
-                        <Container>
-                            <p>Sure name must be at most 3 words and at least with 3 or more characters each one</p>
-                        </Container>
-                    ):""}</div>
+            <h1 id="tituloR">Registrar Usuario</h1>
 
-                    <div className="form-group">
-                        <label htmlFor="email">Email * </label>
-                        <input type="text" className="form-control" id="email" required value={client.email}
-                        onChange={e => setClient({...client, email: e.target.value})} onInput={checkEmail} name="email" />
-                    </div>
-                    <div>{checkEmail()?(
-                        <Container>
-                            <p>Type your email</p>
-                        </Container>
-                    ):""}</div>
+            <div className="form-group">
+                <label htmlFor="fName">First Name *</label>
+                <input type="text" className="form-control" id="fname" required value={client.fName}
+                onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
 
-                    <div className="form-group">
-                        <label htmlFor="telNumber">Tel Number * </label>
-                        <input type="number" className="form-control" id="telNumber" required value={client.telNumber}
-                        onChange={e => setClient({...client, telNumber: e.target.value})} onInput={checkNumber} name="telNumber" />
-                    </div>
-                    <div>{checkNumber()?(
-                        <Container>
-                            <p>It must be a movil telephone number</p>
-                        </Container>
-                    ):""}</div>
+                <div>{checkName()?(
+                    <Container>
+                        <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
+                    </Container>
+                ):""}</div>
+            </div>
+            
+            <div className="form-group">
+                <label htmlFor="sName">Second Name</label>
+                <input type="text" className="form-control" id="sName" value={client.sName}
+                onChange={e => setClient({...client, sName: e.target.value})}  onInput={checkSName} name="sName" />
+    
+                <div>{checkSName()?(
+                    <Container>
+                        <p>Second Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
+                    </Container>
+                ):""}</div>
+            </div>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Password *</label>
-                        <input type="password" className="form-control" id="password" required value={client.password}
-                        onChange={e => setClient({...client, password: e.target.value})} onInput={checkPass} name="password" />
-                    </div>
-                    <div>{checkPass()?(
-                        <Container>
-                            <p>Password must have at least 8 characters and at most 15, no spaces.</p>
-                        </Container>
-                    ):""}</div>
+            <div className="form-group">
+                <label htmlFor="sureName">Sure Name * </label>
+                <input type="text" className="form-control" id="sureName" required value={client.sureName}
+                onChange={e => setClient({...client, sureName: e.target.value})} onInput={checkSureN} name="sureName" />
+    
+                <div>{!checkSureN()?(
+                    <Container>
+                        <p>Sure name must be at most 3 words and at least with 3 or more characters each one</p>
+                    </Container>
+                ):""}</div>
+            </div>
 
-                    <div className="form-group">
-                            <label htmlFor="password">Repeat Password *</label>
-                            <input type="password" className="form-control" id="rePass" required value={client.rePass}
-                            onChange={e => setClient({...client, rePass: e.target.value})} onInput={checkRePass} name="rePass" />
-                    </div>
-                    <div>{checkRePass()?(
-                        <Container>
-                            <p>The two passwords must match</p>
-                        </Container>
-                    ):""}</div>
+            <div className="form-group">
+                <label htmlFor="telNumber">Tel Number * </label>
+                <input type="number" className="form-control" id="telNumber" required value={client.telNumber}
+                onChange={e => setClient({...client, telNumber: e.target.value})} onInput={checkNumber} name="telNumber" />
+                <div>{checkNumber()?(
+                    <Container>
+                        <p>It must be a movil telephone number</p>
+                    </Container>
+                ):""}</div>
+            </div>
 
-                    <div>
-                        {checkFields()?(
-                            <Button onClick={addClient} className="btn btn-succes">
-                                Create Account
-                            </Button>
-                        ):(
-                            <Button className="btn btn-danger">
-                                There are some erros
-                            </Button>
-                        )}
-                    </div>
-                    <div>
-                        {status.loading?(
-                            <Container>
-                                    <Image src="https://bestanimations.com/Science/Gears/gears-animated.gif"/>
-                            </Container>
-                        ): <div>Click to load your data</div> }
-                    </div>
-                </div>
+            <div className="form-group" id="emailc">
+                <label htmlFor="email">Email * </label>
+                <input type="text" className="form-control" id="email" required value={client.email}
+                onChange={e => setClient({...client, email: e.target.value})} onInput={checkEmail} name="email" />
+
+            <div>{checkEmail()?(
+                <Container>
+                    <p>Type your email</p>
+                </Container>
+            ):""}</div>
+            </div>
+
+            <div className="form-group">
+                <label htmlFor="password">Password *</label>
+                <input type="password" className="form-control" id="password" required value={client.password}
+                onChange={e => setClient({...client, password: e.target.value})} onInput={checkPass} name="password" />
+                <div>{checkPass()?(
+                    <Container>
+                        <p>Password must have at least 8 characters and at most 15, no spaces.</p>
+                    </Container>
+                ):""}</div>
+            </div>
+
+            <div className="form-group">
+                    <label htmlFor="password">Repeat Password *</label>
+                    <input type="password" className="form-control" id="rePass" required value={client.rePass}
+                    onChange={e => setClient({...client, rePass: e.target.value})} onInput={checkRePass} name="rePass" />
+                <div>{checkRePass()?(
+                    <Container>
+                        <p>The two passwords must match</p>
+                    </Container>
+                ):""}</div>
+            </div>
+
+            <div id="bot">
+                {checkFields()?(
+                    <Button onClick={addClient} className="btn btn-succes" id="botonx">
+                        Create Account
+                    </Button>
+                ):(
+                    <Button className="btn btn-danger" id="botonx">
+                        There are some erros
+                    </Button>
+                )}
+
+                {status.loading?(
+                    <Container>
+                            <Image src="https://bestanimations.com/Science/Gears/gears-animated.gif"/>
+                    </Container>
+                ): <div>Click to load your data</div> }
+            </div>
         </div>
     );
 }
