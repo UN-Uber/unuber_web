@@ -327,6 +327,7 @@ ul {
 #vehiculos #vehiculo {
   display: flex;
   flex-direction: column;
+  border: solid 3px #f30000;
 }
 
 #vehiculos #vehiculo h5 {
