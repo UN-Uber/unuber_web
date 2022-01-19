@@ -44,14 +44,16 @@ const DeleteAccount = ({token, client, goBackDelete}) => {
     }
 
     return(
-        <>
-            <div className="container">
-            <h1>Delete Account</h1>
-            <h2>Are you sure?</h2>
-            <Button type="button" className="btn btn-succes col-lg" onClick={goBack}>Go Back, keeep account</Button>
-            <Button type="button" className="btn btn-danger col-lg" onClick={deleteAccount}>Delete Account</Button>
+        <div className="submit-form Delete" id="registro">
+            
+            <h1 id="tituloR">Delete Account</h1>
+            <h2 id="tituloR">Are you sure?</h2>
+            <div className="btn-group" role="group" aria-label="Actions">
+
+                <Button type="button" className="btn btn-succes col-lg" id="botonx" onClick={goBack}>Go Back, keeep account</Button>
+                <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={deleteAccount}>Delete Account</Button>
             </div>
-        </>
+        </div>
         
     );
 };

@@ -269,14 +269,149 @@ const EditData:React.FC = () =>{
 
     return(
         <div>{client.active===1?(
-            <div>
-            {!status.loading?(
-            <div className="container">
-                <div className="row">    
+            <div>{!status.loading?(
+                <div className="submit-form registro2" id="registro">
+                    
+                    <h1 id="tituloR">Edit User Data</h1>
+
+                    <div className="foto">
+                        {/*<h2 id="tituloR">User image</h2>*/}
+                        <div>{!status.image?(
+                            <div>
+                                <img className="ima" id="user-imagen" src={client.image} alt="User image"/>
+                            <div className="container">
+                                <button type="button" className="btn btn-warning col-lg" id="botonx" onClick={changeImageBu}>Change Picture</button>
+                            </div>
+                        </div>
+                        ):(
+                            <div className="file">
+                                <FileUpload token={token} setImageUrl={setImageUrl}/>
+                            </div>
+                        )}</div>
+                    </div>
+
+                    <div className="form-group ff">
+                        <label htmlFor="fName">First Name *</label>
+                        <input type="text" className="form-control" id="fname" required value={client.fName}
+                        onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
+
+                        <div>{checkName()?(
+                            <Container>
+                                <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
+                            </Container>
+                        ):""}</div>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="sName">Second Name</label>
+                        <input type="text" className="form-control" id="sName" value={client.sName}
+                        onChange={e => setClient({...client, sName: e.target.value})}  onInput={checkSName} name="sName" />
+            
+                        <div>{checkSName()?(
+                            <Container>
+                                <p>Second Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
+                            </Container>
+                        ):""}</div>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="sureName">Sure Name * </label>
+                        <input type="text" className="form-control" id="sureName" required value={client.sureName}
+                        onChange={e => setClient({...client, sureName: e.target.value})} onInput={checkSureN} name="sureName" />
+            
+                        <div>{!checkSureN()?(
+                            <Container>
+                                <p>Sure name must be at most 3 words and at least with 3 or more characters each one</p>
+                            </Container>
+                        ):""}</div>
+                    </div>
+
+                    <div className="form-group">
+                        <label htmlFor="telNumber">Tel Number * </label>
+                        <input type="number" className="form-control" id="telNumber" required value={client.telNumber}
+                        onChange={e => setClient({...client, telNumber: e.target.value})} onInput={checkNumber} name="telNumber" />
+                        <div>{checkNumber()?(
+                            <Container>
+                                <p>It must be a movil telephone number</p>
+                            </Container>
+                        ):""}</div>
+                    </div>
+
+                    <div className="form-group" id="emailc">
+                        <label htmlFor="email">Email * </label>
+                        <input type="text" className="form-control" id="email" required value={client.email}
+                        onChange={e => setClient({...client, email: e.target.value})} onInput={checkEmail} name="email" />
+
+                    <div>{checkEmail()?(
+                        <Container>
+                            <p>Type your email</p>
+                        </Container>
+                    ):""}</div>
+                    </div>
+
+                    <div className="btn-group btn-group2" role="group" aria-label="Actions">
+                        <div>{checkFields()?(
+                                <Button type="button" className="btn btn-success col-lg" id="botonx" onClick={saveChanges}>Save Changes</Button>
+                            ):""}
+                        </div>
+                        <Button type="button" className="btn btn-secondary col-lg" id="botonx" onClick={goBack}>Go Back</Button>
+                    </div>
+
+                    <div id="cambio">{status.password?(
+                        <div className="container">
+                        
+                            <div className="form-group">
+                                <label htmlFor="password">Current Password *</label>
+                                <input type="password" className="form-control" id="password" required value={client.password}
+                                onChange={e => setClient({...client, password: e.target.value})}  name="password" />
+                            </div>
+                            
+                            <div className="form-group">
+                                <label htmlFor="password">New Password</label>
+                                <input type="password" className="form-control" id="newPassword" required value={client.newPassword}
+                                onChange={e => setClient({...client, newPassword: e.target.value})} onInput={checkPass} name="newPassword" />
+                            </div>
+                            
+                            <div>{checkPass()?(
+                                <Container>
+                                    <p>Password must have at least 8 characters and at most 15, no spaces.</p>
+                                </Container>
+                            ):""}</div>
+        
+                            <div className="form-group">
+                                <label htmlFor="password">Repeat new  Password *</label>
+                                <input type="password" className="form-control" id="reNewPassword" required value={client.reNewPassword}
+                                onChange={e => setClient({...client, reNewPassword: e.target.value})} onInput={checkRePass} name="reNewPassword" />
+                            </div>
+
+                            <div>{checkRePass()?(
+                                <Container>
+                                    <p>The two passwords must match</p>
+                                </Container>
+                            ):""}</div>
+
+                            <div id="salto">
+                                <div>
+                                    {testPasswords()?(
+                                        <Button type="button" className="btn btn-succes col-lg" id="botonx" onClick={chPassword}>Change Password and data</Button>
+                                    ):""}
+                                </div>
+                                <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={cancelPassword}>Cancel</Button>
+                            </div>
+                        </div>
+                            ):(
+                                <Button type="button" className="btn btn-info col-lg" id="botonx" onClick={chPasswordBu}>ChangePassword</Button>
+                            )}
+                        </div>
+
+
+
+                {/*<div className="row">    
                 <div className="col-6" > 
-                <h1>User Data</h1>
+                
                 <div className="container">
                     <div className="row">
+                    
                     <div className="form-group">
                         <label htmlFor="fName">First Name *</label>
                         <input type="text" className="form-control" id="fname" required value={client.fName}
@@ -340,16 +475,14 @@ const EditData:React.FC = () =>{
                     </div>
                 </div>
                 <div className="btn-group" role="group" aria-label="Actions">
-                    <div>
-                        {checkFields()?(
+                    <div>{checkFields()?(
                             <Button type="button" className="btn btn-success col-lg" onClick={saveChanges}>Save Changes</Button>
                         ):""}
                     </div>
                     <Button type="button" className="btn btn-secondary col-lg" onClick={goBack}>Go Back</Button>
                 </div>
                 
-                <div>
-                    {status.password?(
+                <div>{status.password?(
                         <div className="container">
                         <div className="form-group">
                             <label htmlFor="password">Current Password *</label>
@@ -393,25 +526,11 @@ const EditData:React.FC = () =>{
                 
 
         </div>
-        <div className="col-6">
-            <h2>User image</h2>
-            <div>{!status.image?(
-                <div>
-                    <div className="container">
-                    <img src={client.image} alt="User image" className="img-thumbnail" />
-                </div>
-                <div className="container">
-                    <Button type="button" className="btn btn-warning col-lg" onClick={changeImageBu}>Change Picture</Button>
-                </div>
-                </div>
+        
+
+        </div>*/}
+        </div>
             ):(
-                <FileUpload token={token} setImageUrl={setImageUrl} />
-            )}</div>
-            </div>
-        </div>
-        </div>
-            )
-            :(
                 <div>
                     <Container>
                         <h1>We are working</h1>
@@ -427,7 +546,6 @@ const EditData:React.FC = () =>{
             <h2><a href="https://i.pinimg.com/736x/58/e2/8f/58e28fae02def3695760602649056285.jpg"> Restore Account</a></h2>
             </>
         )}</div>
-            
     );
 }
 
