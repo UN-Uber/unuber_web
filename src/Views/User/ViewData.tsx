@@ -29,7 +29,7 @@ const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app";
 const apilocal =  "http://localhost:4000";
 
 function fetchClient(id:number, token:string){
-    return axios.post(apilocal, {
+    return axios.post(uriGraphql, {
         query:` query GetClient($idClient: Int) {
                 getClient(idClient: $idClient) {
                 idClient

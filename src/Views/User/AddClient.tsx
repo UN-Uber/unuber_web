@@ -27,7 +27,7 @@ const heroku = "https://unuberaccount.herokuapp.com/api";
 const apilocal =  "http://localhost:4000/auth" 
 
 function createClient(client:UserCreate){
-    return axios.post(apilocal,{
+    return axios.post(uriGraphql,{
         query: `mutation Mutation($client: ClientInput!) {
             createClient(client: $client) {
             response

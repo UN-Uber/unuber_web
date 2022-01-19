@@ -61,7 +61,7 @@ function fetchClient(id:number, token:string){
 }
 
 function updateClient(id:number, token:string, client:User){
-    return axios.post(apilocal, {
+    return axios.post(uriGraphql, {
         query:` mutation UpdateClient($idClient: Int!, $client: ClientInput!) {
                 updateClient(idClient: $idClient, client: $client)
             } `,
