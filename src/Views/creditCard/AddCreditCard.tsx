@@ -5,6 +5,12 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import  TextField  from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import InputMask from "react-input-mask";
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Alert from '@mui/material/Alert';
 
 interface CreditCardCreate{
     cardNumber: string,
@@ -15,6 +21,11 @@ interface CreditCardCreate{
 interface Loading{
     loading: boolean;
     theError: any;
+}
+
+interface Toast{
+    state: boolean,
+    message: string
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app/";
@@ -62,19 +73,33 @@ const AddCreditCard: React.FC = () => {
         theError: []
     });
 
+    const [toastSuccess, setToastSuccess] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+    const [toastError, setToastError] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+
     function addCreditCard(){
 
-        // TODO: Change Alerts for Material Snackbar
 
         setStatus({ ...status, loading: true});
         createCreditCard(token, id, card).then((data) => {
             setStatus({ ...status, loading: false});
             if(data.data.data.createCard.response == "Card already register"){
-                alert("La tarjeta ya está registrada");
+                setToastError({
+                    state: true,
+                    message: "La tarjeta ya está registrada"
+                });
             }
             else{
-                alert("Tarjeta registrada");
-                navigate("home");
+                setToastError({
+                    state: true,
+                    message: "Tarjeta registrada"
+                });
+                setTimeout(() => navigate("/wallet"));
             }
         }).catch((e) => {
             console.log(e);
@@ -102,8 +127,6 @@ const AddCreditCard: React.FC = () => {
 
     function checkDueDate(): boolean {
 
-        console.log("Due date");
-
         if(card.dueDate.length != 5) return false;
 
         let currentDate = new Date();
@@ -129,58 +152,109 @@ const AddCreditCard: React.FC = () => {
         return !regex.test(card.cvv);
     }
 
-
     return (
-        <div className="container">
-            <form>
-                <TextField 
-                    required
-                    fullWidth
-                    type="number" 
-                    id="outlined-basic" 
-                    label="tarjeta de crédito" 
-                    variant="outlined"
-                    onChange={event => setCreditCard({...card, cardNumber: event.target.value})}
-                    error={!checkCreditCardNumber()}
-                    helperText={
-                        checkCreditCardNumber()
-                        ? ""
-                        : "El número de la tarjeta no es válido"
-                    }
+        <>
+            <Container component="main" maxWidth="xs">
+            <CssBaseline />
+            <Box
+                sx={{
+                    marginTop: 8,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                }}
+            >
+                <Typography component="h1" variant="h4">
+                    Registrar tarjeta
+                </Typography>
+                <Box component="form" sx={{ mt: 5 }}>
+                <InputMask 
+                    mask="9999 9999 9999 9999"
+                    maskPlaceholder=" "
+                    alwaysShowMask={false}
+                    onChange={event => setCreditCard({...card, cardNumber: event.target.value.replaceAll(" ","")})}
+                >
+                    <TextField 
+                        required
+                        fullWidth
+                        margin="normal" 
+                        label="tarjeta de crédito" 
+                        variant="outlined"
+                        error={!checkCreditCardNumber()}
+                        helperText={
+                            checkCreditCardNumber()
+                            ? ""
+                            : "El número de la tarjeta no es válido"
+                        }               
+                    />
+                </InputMask>
 
-                />
-
-                <TextField 
-                    required 
-                    id="outlined-basic" 
-                    label="fecha de vecimiento" 
-                    variant="outlined" 
+                <InputMask 
+                    mask="99/99"
+                    maskPlaceholder={null}
+                    alwaysShowMask={false}
                     onChange={event => setCreditCard({...card, dueDate: event.target.value})}
-                    error={!checkDueDate()}
-                    helperText={
-                        checkDueDate()
-                        ? ""
-                        : "La tarjeta está vencida"
-                    }
-                />
+                >
+                    <TextField 
+                        required 
+                        margin="normal"
+                        fullWidth 
+                        label="fecha de vecimiento" 
+                        variant="outlined"
+                        error={!checkDueDate()}
+                        helperText={
+                            checkDueDate()
+                            ? ""
+                            : "La tarjeta está vencida"
+                        }
+                    />
+                </InputMask>
 
-                <TextField 
-                    required 
-                    type="number"
-                    id="outlined-basic num" 
-                    label="cvv"
-                    variant="outlined"
+                <InputMask 
+                    mask="999"
+                    maskPlaceholder={null}
+                    alwaysShowMask={false}
                     onChange={event => setCreditCard({...card, cvv: event.target.value})}
-                    error={checkCvv()}
-                    helperText={
-                        checkCvv()
-                        ? "CVV no es válido"
-                        : ""
-                    }
-                />
-                <Button onClick={addCreditCard}>Enviar</Button>
-            </form>
-        </div>
+                >
+                    <TextField 
+                        required
+                        margin="normal"
+                        fullWidth
+                        label="cvv"
+                        variant="outlined"
+                        error={checkCvv()}
+                        helperText={
+                            checkCvv()
+                            ? "CVV no es válido"
+                            : ""
+                        }
+                    />
+                </InputMask>
+                <Button
+                    fullWidth
+                    variant="contained"
+                    sx={{ mt: 3 }}  
+                    onClick={addCreditCard}
+                >
+                    Enviar
+                </Button>
+
+                {
+                    toastSuccess.state
+                    ? <Alert sx={{mt: 10}} variant="filled" severity="success">{toastSuccess.message}</Alert>
+                    : null
+                }
+
+                {
+                    toastError.state
+                    ? <Alert sx={{mt: 10}}variant="filled" severity="error">{toastError.message}</Alert>
+                    : null
+                }
+                </Box>
+            </Box>
+            </Container>
+        
+        </>
     );
 
 

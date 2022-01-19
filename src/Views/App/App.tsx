@@ -9,6 +9,7 @@ import UserCreditCards from '../creditCard/ListUserCreditCards/ListUserCreditCar
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
+import CreditCardInfo from '../creditCard/CreditCardInfo';
 
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
             <Route path="/addCreditCard" element={<AddCreditCard />} />
             <Route path="/wallet" element={<UserCreditCards />}/>
             <Route path="/maps" element={<Maps/>} />
+            <Route path="/cardDetails" element={<CreditCardInfo />}/>
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       <Footer/>
