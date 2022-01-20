@@ -16,12 +16,11 @@ export interface Token {
     exp: number;
 }
 
-function checkIfExpired(token:string){
+export function checkIfExpired(token:string){
     if(token === ""){
         return true;
     }
     const decoded:Token = jwt_decode<Token>(token);
-    console.log(decoded);
     if(decoded.exp <Date.now()/1000){
         localStorage.removeItem("token");
         return true;
