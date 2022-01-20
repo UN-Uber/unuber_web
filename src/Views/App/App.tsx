@@ -11,23 +11,30 @@ import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
 import CreditCardInfo from '../creditCard/CreditCardInfo';
 import Rating from '../Rating/rating';
+import PrivateRoute from './ProtectedRoute';
+import { selectIsLoggedIn } from '@/store';
+import { useSelector } from 'react-redux';
+
 
 
 function App() {
-
+  const isLoggedIn = useSelector(selectIsLoggedIn);
   return (
     <BrowserRouter>
         <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/login" element={isLoggedIn? <Home/> : <Login />} />
             <Route path="/addUser" element={<AddClient />} />
-            <Route path="/viewData" element={<ViewData />} />
-            <Route path="/editData" element={<EditData />} />
-            <Route path="/addCreditCard" element={<AddCreditCard />} />
-            <Route path="/wallet" element={<UserCreditCards />}/>
-            <Route path="/maps" element={<Maps/>} />
-            <Route path="/cardDetails" element={<CreditCardInfo />}/>
-            <Route path="/rating" element={<Rating />} /> 
+
+            <Route element={<PrivateRoute />}>
+                <Route path="/home" element={<Home />} />   
+                <Route path="/viewData" element={<ViewData />} />
+                <Route path="/editData" element={<EditData />} />
+                <Route path="/addCreditCard" element={<AddCreditCard />} />
+                <Route path="/wallet" element={<UserCreditCards />}/>
+                <Route path="/maps" element={<Maps/>} />
+                <Route path="/cardDetails" element={<CreditCardInfo />}/>
+                <Route path="/rating" element={<Rating />} /> 
+            </Route>
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
       <Footer/>

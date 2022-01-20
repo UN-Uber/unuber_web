@@ -1,9 +1,9 @@
 import React from "react";
 import Logo from '../../assets/profile_iconRecurso 5.svg';
 import im1 from '../../assets/a.png';
-import im2 from '../../assets/a.png';
-import im3 from '../../assets/a.png';
-import im4 from '../../assets/a.png';
+import im2 from '../../assets/regis.png';
+import im3 from '../../assets/regis.png';
+import im4 from '../../assets/login2.png';
 
 import { Button, Container, Image } from 'react-bootstrap';
 
@@ -15,7 +15,7 @@ const Menu: React.FC = () => {
         
         <ul className="nav" id="principal">
           <li>
-            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2"  viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
+            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-menu-2"  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
               <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
               <line x1="4" y1="6" x2="20" y2="6"></line>
               <line x1="4" y1="12" x2="20" y2="12"></line>

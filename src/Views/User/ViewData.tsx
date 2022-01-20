@@ -107,12 +107,47 @@ const ViewData:React.FC = () =>{
     return(
         <div>{(client.active === 1)?(
             <div>{!status.delete?(
-                <div>
-                {!status.loading?(
-                <div className="container">
-                    <div className="row">    
+                <div>{!status.loading?(
+                    <div className="submit-form Delete" id="registro">
+                    
+                        <img className="ima" id="user-imagen" src={client.image} alt="User image"/>
+
+                        <h1 id="tituloR">User Data</h1>
+
+                        <div className="btn-group" role="group" aria-label="Actions">
+                            <Button type="button" className="btn btn-success col-lg " id="botonx" onClick={editData}>Modify Data</Button>
+                            <Button type="button" className="btn btn-secondary col-lg" id="botonx" onClick={goOut}>Go out</Button>
+                            <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={deleteAccount}>Delete Account</Button>
+                        </div>
+
+                        <div className="form-group">
+                            <h3>Name</h3>
+                            <h4>{client.fName}</h4>
+                        </div>
+
+                        <div className="form-group">
+                            <h3>Second name</h3>
+                            <h4>{client.sName}</h4>
+                        </div>
+
+                        <div className="form-group">
+                            <h3>Sure name</h3>
+                            <h4>{client.sureName}</h4>
+                        </div>
+
+                        <div className="form-group">
+                            <h3>Tel number</h3>
+                            <h4>{client.telNumber}</h4>
+                        </div>
+
+                        <div className="form-group" id="emailc">
+                            <h3>Email</h3>
+                            <h4>{client.email}</h4>
+                        </div>
+
+                   {/* <div className="row">    
                     <div className="col-6" > 
-                    <h1>User Data</h1>
+                    <h1></h1>
                     <div className="container">
                         <div className="row">
                             <div className="col-md">
@@ -167,23 +202,19 @@ const ViewData:React.FC = () =>{
                     <img src={client.image} alt="User image" className="img-thumbnail" />
                 </div>
                 </div>
+            </div>*/}
             </div>
-            </div>
-                )
-                :(
+                ):(
                     <div>
                         <Container>
                             <h1>We are working</h1>
                             <img src="https://bestanimations.com/Science/Gears/gears-animated.gif" alt="Estamos cargando la infomración" />
                         </Container>
-                        
                     </div>
                 )}
             </div>
             ):(
-                <div className="container">
-                    <DeleteAccount token={token} client={client} goBackDelete={goBackDelete} />
-                </div>
+                <DeleteAccount token={token} client={client} goBackDelete={goBackDelete} />
             )}
             </div> 
         ):(
