@@ -1,9 +1,9 @@
 import React from "react";
 import Logo from '../../assets/profile_iconRecurso 5.svg';
 import im1 from '../../assets/a.png';
-import im2 from '../../assets/a.png';
-import im3 from '../../assets/a.png';
-import im4 from '../../assets/a.png';
+import im2 from '../../assets/regis.png';
+import im3 from '../../assets/regis.png';
+import im4 from '../../assets/login2.png';
 
 import { Button, Container, Image } from 'react-bootstrap';
 
