@@ -10,9 +10,11 @@ import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
 import CreditCardInfo from '../creditCard/CreditCardInfo';
+import Rating from '../Rating/rating';
 import PrivateRoute from './ProtectedRoute';
 import { selectIsLoggedIn } from '@/store';
 import { useSelector } from 'react-redux';
+
 
 
 function App() {
@@ -22,6 +24,7 @@ function App() {
         <Routes>
             <Route path="/login" element={isLoggedIn? <Home/> : <Login />} />
             <Route path="/addUser" element={<AddClient />} />
+
             <Route element={<PrivateRoute />}>
                 <Route path="/home" element={<Home />} />   
                 <Route path="/viewData" element={<ViewData />} />
@@ -30,6 +33,7 @@ function App() {
                 <Route path="/wallet" element={<UserCreditCards />}/>
                 <Route path="/maps" element={<Maps/>} />
                 <Route path="/cardDetails" element={<CreditCardInfo />}/>
+                <Route path="/rating" element={<Rating />} /> 
             </Route>
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>
