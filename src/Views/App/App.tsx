@@ -39,7 +39,7 @@ function App() {
       {isLoggedIn? <Menu/> :  null}
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={isLoggedIn? <Home/> : <Login />} />
+          <Route path="/login" element={isLoggedIn? <Navigate to="/home" /> : <Login />} />
           <Route path="/addUser" element={<AddClient />} />
 
           <Route element={<PrivateRoute />}>
@@ -48,7 +48,6 @@ function App() {
               <Route path="/editData" element={<EditData />} />
               <Route path="/addCreditCard" element={<AddCreditCard />} />
               <Route path="/wallet" element={<UserCreditCards />}/>
-              <Route path="/maps" element={<Maps/>} />
               <Route path="/cardDetails" element={<CreditCardInfo />}/>
               <Route path="/rating" element={<Rating />} />
           </Route>

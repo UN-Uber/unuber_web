@@ -5,6 +5,15 @@ import { useNavigate } from "react-router-dom";
 import Lupa from '../../assets/lupa.png';
 import Flecha from '../../assets/flecha.png';
 import Carro from '../../assets/UberX.png';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Logo from '../../assets/profile_iconRecurso 6.svg';
+import Link from '@mui/material/Link';
+import Maps from '../Maps/Maps';
 
 
 const Home: React.FC = () => {
@@ -14,69 +23,16 @@ const Home: React.FC = () => {
     }
 
     return (
-        <div id="registro">
-            <h2 id="tituloR">Inicio del viaje</h2>
-            
-            <h3 id="subtitulo">Mapa</h3>
-
-            {/*Incluir el mapa en este div*/}
-            <div id="mapa">
-                
-
-
-            </div>
-            
-            <h3 id="subtitulo">Destino</h3>
-            
-            <div id="destino">
-                <img className="ima" src={Lupa}/>
-                <input type="text" name="name" />
-                <img className="ima" src={Flecha}/>
-            </div>
-            
-            <h3 id="subtitulo">Tipo de Transporte</h3>
-            
-            {/*Incertar los vehiculos falta desarrollar*/}
-            <div id="vehiculos">
-                <div id="vehiculo">
-                    <button onClick={newViaje} className="btn btn-succes" id="botonx">
-                        <img className="imav" src={Carro}/>
-                    </button>
-                    <h5>Costo</h5>
-                    <h5>Tipo</h5>
-                    <h5>Viaje</h5>
-                </div>
-                <div id="vehiculo">
-                    <button onClick={newViaje} className="btn btn-succes" id="botonx">
-                        <img className="imav" src={Carro}/>
-                    </button>
-                    <h5>Costo</h5>
-                    <h5>Tipo</h5>
-                    <h5>Viaje</h5>
-                </div>
-                <div id="vehiculo">
-                    <button onClick={newViaje} className="btn btn-succes" id="botonx">
-                        <img className="imav" src={Carro}/>
-                    </button>
-                    <h5>Costo</h5>
-                    <h5>Tipo</h5>
-                    <h5>Viaje</h5>
-                </div>
-                <div id="vehiculo">
-                    <button onClick={newViaje} className="btn btn-succes" id="botonx">
-                        <img className="imav" src={Carro}/>
-                    </button>
-                    <h5>Costo</h5>
-                    <h5>Tipo</h5>
-                    <h5>Viaje</h5>
-                </div>
-            </div>
-
-            <button onClick={newViaje} className="btn btn-succes" id="botonx">
-                Iniciar viaje
-            </button>
-        </div>
-    )
+        <Box
+            sx={{
+                width: '98.9vw',
+                height: '90vh',
+                overflow: 'hidden'
+            }}
+        >
+            <Maps/>
+        </Box>
+    );
 }
 
 export default Home;
