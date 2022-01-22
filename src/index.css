@@ -240,10 +240,10 @@ ul {
   margin-bottom: 10rem;
 }
 
-#login-imagen{
+#signup-imagen{
   width: 100px !important;
   height: 100px !important;
-  margin: auto;
+  margin: 0 auto 32px;
 }
 
 #user-imagen{

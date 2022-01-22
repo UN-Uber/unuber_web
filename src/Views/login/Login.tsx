@@ -12,8 +12,11 @@ import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import Logo from '../../assets/Login.png';
+import Logo from '../../assets/profile_iconRecurso 6.svg';
+import Link from '@mui/material/Link';
 import './Login.css';
+
+
 interface Details{
     field: string;
     password: string;
@@ -102,14 +105,20 @@ const Login: React.FC = () => {
         }
     }, [details.password]);
 
-
 	return (
-        <>
-            <Container component="main" maxWidth="xs">
+        <Box
+            sx={{
+                width: '100vw',
+                height: '100vh',
+                overflow: 'hidden',
+                bgcolor: '#F3F3F3',
+            }}
+        >
+            <Container component="main" maxWidth="sm" sx={{bgcolor: '#FFFFFF', marginTop: 8, py: 6}}>
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        px: 8,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -152,7 +161,6 @@ const Login: React.FC = () => {
                         />
 
                         <Button 
-                            id="botonx"
                             type="submit"
                             fullWidth
                             variant="contained"
@@ -161,10 +169,13 @@ const Login: React.FC = () => {
                         >
                             Iniciar sesión
                         </Button>
+                        <Link href="/addUser" variant="body2">
+                            {"¿No tienes una cuenta? Regístrate"}
+                        </Link>
                     </Box>
                 </Box>
             </Container>
-        </>
+        </Box>
 	);
 };
 

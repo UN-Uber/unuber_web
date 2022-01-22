@@ -12,10 +12,9 @@ import { store } from "./store";
 ReactDOM.render(
 	<React.StrictMode>
         <ApolloProvider client={client}>
-                <Provider store={store}>
-		        <Menu />
+			<Provider store={store}>
 		        <App />
-                </Provider>
+			</Provider>
         </ApolloProvider>
 	</React.StrictMode>,
 	document.getElementById("root")
