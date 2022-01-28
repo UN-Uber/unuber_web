@@ -193,7 +193,7 @@ const AddCreditCard: React.FC = () => {
     }, [card.cvv]);
 
     return (
-        <>
+        <Box sx={{minHeight: '85vh'}}>
             <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -294,7 +294,7 @@ const AddCreditCard: React.FC = () => {
             </Box>
             </Container>
         
-        </>
+        </Box>
     );
 
 

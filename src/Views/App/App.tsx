@@ -5,7 +5,7 @@ import AddClient from '../User/AddClient';
 import ViewData from '../User/ViewData'; 
 import EditData from '../User/EditData';
 import AddCreditCard from '../creditCard/AddCreditCard';
-import UserCreditCards from '../creditCard/ListUserCreditCards/ListUserCreditCards'
+import UserCreditCards from '../creditCard/ListUserCreditCards';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
