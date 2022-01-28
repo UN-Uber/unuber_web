@@ -1,4 +1,5 @@
 import React, { useEffect, useState }from "react";
+import { useUpdateEffect } from "react-use";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -26,6 +27,12 @@ interface Loading{
 interface Toast{
     state: boolean,
     message: string
+}
+
+interface FormErrors{
+    cardNumber: boolean,
+    dueDate: boolean,
+    cvv: boolean
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app/";
@@ -81,6 +88,12 @@ const AddCreditCard: React.FC = () => {
         state: false,
         message: ""
     });
+
+    const [formValidationError, setFormValidationError] = useState<FormErrors>({
+        cardNumber: false,
+        dueDate: false,
+        cvv: false
+    });	
 
     function addCreditCard(){
 
@@ -152,6 +165,33 @@ const AddCreditCard: React.FC = () => {
         return !regex.test(card.cvv);
     }
 
+    useUpdateEffect(() => {
+        if(!checkCreditCardNumber()){
+            setFormValidationError({...formValidationError, cardNumber: true});
+        }
+        else{
+            setFormValidationError({...formValidationError, cardNumber: false});
+        }
+    }, [card.cardNumber]);
+
+    useUpdateEffect(() => {
+        if(!checkDueDate()){
+            setFormValidationError({...formValidationError, dueDate: true});
+        }
+        else{
+            setFormValidationError({...formValidationError, dueDate: false});
+        }
+    }, [card.dueDate]);
+
+    useUpdateEffect(() => {
+        if(!checkCvv()){
+            setFormValidationError({...formValidationError, cvv: true});
+        }
+        else{
+            setFormValidationError({...formValidationError, cvv: false});
+        }
+    }, [card.cvv]);
+
     return (
         <>
             <Container component="main" maxWidth="xs">
@@ -180,11 +220,11 @@ const AddCreditCard: React.FC = () => {
                         margin="normal" 
                         label="tarjeta de crédito" 
                         variant="outlined"
-                        error={!checkCreditCardNumber()}
+                        error={formValidationError.cardNumber}
                         helperText={
-                            checkCreditCardNumber()
-                            ? ""
-                            : "El número de la tarjeta no es válido"
+                            formValidationError.cardNumber
+                            ? "El número de la tarjeta no es válido"
+                            : ""
                         }               
                     />
                 </InputMask>
@@ -201,11 +241,11 @@ const AddCreditCard: React.FC = () => {
                         fullWidth 
                         label="fecha de vecimiento" 
                         variant="outlined"
-                        error={!checkDueDate()}
+                        error={formValidationError.dueDate}
                         helperText={
-                            checkDueDate()
-                            ? ""
-                            : "La tarjeta está vencida"
+                            formValidationError.dueDate
+                            ? "La tarjeta está vencida"
+                            : ""
                         }
                     />
                 </InputMask>
@@ -222,9 +262,9 @@ const AddCreditCard: React.FC = () => {
                         fullWidth
                         label="cvv"
                         variant="outlined"
-                        error={checkCvv()}
+                        error={formValidationError.cvv}
                         helperText={
-                            checkCvv()
+                            formValidationError.cvv
                             ? "CVV no es válido"
                             : ""
                         }

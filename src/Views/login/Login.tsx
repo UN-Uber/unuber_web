@@ -108,7 +108,7 @@ const Login: React.FC = () => {
 	return (
         <Box
             sx={{
-                width: '100vw',
+                width: '98.9vw',
                 height: '100vh',
                 overflow: 'hidden',
                 bgcolor: '#F3F3F3',

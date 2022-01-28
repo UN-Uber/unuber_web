@@ -19,6 +19,7 @@ const Footer: React.FC = () => {
 
     return (
         <Typography
+            component="div"
             sx={{ display: 'flex', bgcolor: "#A6A6A6"}}
         >
             <CssBaseline />
