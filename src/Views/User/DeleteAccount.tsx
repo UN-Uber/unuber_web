@@ -1,6 +1,12 @@
-import {useMutation , gql} from "@apollo/client";
-import {Button} from 'react-bootstrap';
-import {useNavigate} from 'react-router-dom';
+import { useMutation , gql } from "@apollo/client";
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const DELETE_ACCOUNT = gql `mutation UpdateClient($idClient: Int!, $client: ClientInput!) {
@@ -10,7 +16,11 @@ const DELETE_ACCOUNT = gql `mutation UpdateClient($idClient: Int!, $client: Clie
 
 const DeleteAccount = ({token, client, goBackDelete}) => {
     let navigate = useNavigate();
+
+    const [open, setOpen] = useState(true);
+
     const goBack = () =>{
+        setOpen(false);
         goBackDelete();
     }
 
@@ -43,18 +53,40 @@ const DeleteAccount = ({token, client, goBackDelete}) => {
         navigate('/home');
     }
 
-    return(
-        <div className="submit-form Delete margen" id="registro">
-            
-            <h1 id="tituloR">Delete Account</h1>
-            <h2 id="tituloR">Are you sure?</h2>
-            <div className="btn-group" role="group" aria-label="Actions">
+    const style = {
+        position: 'absolute' as 'absolute',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        width: 400,
+        boxShadow: 24,
+        pt: 2,
+        px: 4,
+        pb: 3,
+    };
 
-                <Button type="button" className="btn btn-succes col-lg" id="botonx" onClick={goBack}>Go Back, keeep account</Button>
-                <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={deleteAccount}>Delete Account</Button>
-            </div>
-        </div>
-        
+    return(
+        <>
+            <Modal
+                hideBackdrop
+                open={open}
+                onClose={goBack}
+                aria-labelledby="Eliminar cuenta"
+            >
+                <Box sx={{ ...style, width: 500, p: 4 }}>
+                    <Typography component="h1" variant="h4" sx={{mb: 2}}>
+                        Eliminar cuenta
+                    </Typography>
+                    <Typography  sx={{mb: 4, fontWeight: 300, fontSize: 20}}>
+                        ¿Estás seguro de eliminar tu cuenta?
+                    </Typography>
+                    <Stack spacing={2} direction="row">
+                        <Button variant="outlined" startIcon={<DeleteIcon />} onClick={deleteAccount}>Eliminar cuenta</Button>
+                        <Button variant="contained" onClick={goBack}>Cancelar</Button>
+                    </Stack>
+                </Box>
+            </Modal>
+        </>       
     );
 };
 

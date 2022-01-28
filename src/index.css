@@ -246,14 +246,11 @@ ul {
   margin: 0 auto 32px;
 }
 
-#user-imagen{
-  border: solid 3px #F30000;
+#user-image{
   padding: 1rem;
   width: 180px !important;
   height: 180px !important;
   margin: auto;
-  border-radius: 2rem;
-  /* background-color: #f30000; */
 }
 
 .file {
@@ -487,6 +484,19 @@ ul {
   font-weight: 700;
   margin-top: 0;
 }
+
+#login-imagen{
+  width: 9.3em !important;
+  height: 6.25em !important;
+  margin: 0 auto 2em;
+}
+
+#error-image{
+  width: 200px ;
+  height: 200px;
+}
+
+
 #play {
   margin: 1rem;
   width: 400px !important;
