@@ -36,8 +36,8 @@ function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
   return (
     <ThemeProvider theme={globalTheme}>
-      {isLoggedIn? <Menu/> :  null}
       <BrowserRouter>
+        {isLoggedIn? <Menu/> :  null}
         <Routes>
           <Route path="/login" element={isLoggedIn? <Navigate to="/home" /> : <Login />} />
           <Route path="/addUser" element={<AddClient />} />

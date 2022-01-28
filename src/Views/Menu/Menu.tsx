@@ -31,14 +31,14 @@ const Menu: React.FC = () => {
 
   // TODO: Logout Logic
 
-  /*let dispatch = useDispatch();
+  let dispatch = useDispatch();
   let navigate = useNavigate();
 
   function endSession() {
     dispatch(logout);
     localStorage.removeItem("token");
-    navigate("/login");
-  }*/
+    setTimeout(() => navigate("/login"), 3500);
+  }
 
   return (
     <Box sx={{ flexGrow: 1}}>
