@@ -7,6 +7,7 @@ import Flecha from '../../assets/flecha.png';
 import Carro from '../../assets/UberX.png';
 
 
+
 const Home: React.FC = () => {
 
     function newViaje(){
@@ -15,6 +16,7 @@ const Home: React.FC = () => {
 
     return (
         <div id="registro">
+            
             <h2 id="tituloR">Inicio del viaje</h2>
             
             <h3 id="subtitulo">Mapa</h3>
@@ -70,11 +72,11 @@ const Home: React.FC = () => {
                     <h5>Tipo</h5>
                     <h5>Viaje</h5>
                 </div>
-            </div>
+            </div> 
 
             <button onClick={newViaje} className="btn btn-succes" id="botonx">
                 Iniciar viaje
-            </button>
+            </button>}
         </div>
     )
 }

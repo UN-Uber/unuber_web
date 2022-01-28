@@ -9,6 +9,7 @@ import UserCreditCards from '../creditCard/ListUserCreditCards/ListUserCreditCar
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import Maps from '../Maps/Maps';
+import AditionalMap from '../Maps/AditionalMap';
 import CreditCardInfo from '../creditCard/CreditCardInfo';
 import Rating from '../Rating/rating';
 import PrivateRoute from './ProtectedRoute';
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/maps" element={<Maps/>} />
                 <Route path="/cardDetails" element={<CreditCardInfo />}/>
                 <Route path="/rating" element={<Rating />} /> 
+                <Route path="/aditionMap" element={<AditionalMap />} />
             </Route>
             <Route path="*" element={<Navigate to="/home" />} />
         </Routes>

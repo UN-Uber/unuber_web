@@ -1,7 +1,8 @@
 import React, { useEffect, useState} from "react";
 import axios from "axios";
 import { Button, Container } from "react-bootstrap";
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import {logout} from "@/features/authSlice"
 import { RootState } from "@/store";
 import {useNavigate} from 'react-router-dom';
 import DeleteAccount from '../User/DeleteAccount';
@@ -58,6 +59,7 @@ function fetchClient(id:number, token:string){
 const ViewData:React.FC = () =>{
 
     let navigate = useNavigate();
+    let dispatch = useDispatch();
 
     var token = useSelector((state:RootState) => state.auth.user) as string;
     var id = useSelector((state:RootState) => state.auth.id);
@@ -94,6 +96,8 @@ const ViewData:React.FC = () =>{
     }
 
     function goOut(){
+        localStorage.setItem("token", "");
+        dispatch(logout());
         navigate("/login");
     }
 
