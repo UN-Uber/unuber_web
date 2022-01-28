@@ -14,7 +14,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Logo from '../../assets/profile_iconRecurso 6.svg';
 import Link from '@mui/material/Link';
-import './Login.css';
 
 
 interface Details{

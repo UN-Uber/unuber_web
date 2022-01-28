@@ -1,5 +1,4 @@
 import React from 'react'
-import './Footer.css'
 import PhoneAndroidSharpIcon from '@mui/icons-material/PhoneAndroidSharp';
 import PhoneEnabledSharpIcon from '@mui/icons-material/PhoneEnabledSharp';
 import EmailSharpIcon from '@mui/icons-material/EmailSharp';

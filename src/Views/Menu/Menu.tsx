@@ -35,9 +35,9 @@ const Menu: React.FC = () => {
   let navigate = useNavigate();
 
   function endSession() {
-    dispatch(logout);
     localStorage.removeItem("token");
-    setTimeout(() => navigate("/login"), 3500);
+    dispatch(logout);
+    setTimeout(() => navigate("/login"), 2000);
   }
 
   return (
@@ -98,7 +98,7 @@ const Menu: React.FC = () => {
               <ListItemText primary="Billetera" />
             </ListItem>
 
-            <ListItem button key={4} onClick={() => {}}>
+            <ListItem button key={4} onClick={endSession}>
               <ListItemIcon>
                 <LogoutIcon  sx={{color: "#F30000", fontSize: 30}}/>
               </ListItemIcon>

@@ -27,7 +27,7 @@ const FileUpload = ({token, setImageUrl}) => {
     
     return(
         <>
-            <p> Choose a file</p>
+            <p>Selecciona un archivo</p>
             <input type="file" name="image" onChange={handleFileChange} />
         </>
     );

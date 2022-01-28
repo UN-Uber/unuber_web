@@ -66,7 +66,7 @@ const DeleteAccount = ({token, client, goBackDelete}) => {
     };
 
     return(
-        <>
+        <Box sx={{height: '150vh'}}>
             <Modal
                 hideBackdrop
                 open={open}
@@ -86,7 +86,7 @@ const DeleteAccount = ({token, client, goBackDelete}) => {
                     </Stack>
                 </Box>
             </Modal>
-        </>       
+        </Box>       
     );
 };
 

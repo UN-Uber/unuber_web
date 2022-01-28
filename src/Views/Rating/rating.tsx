@@ -1,34 +1,25 @@
 import { useState } from "react";
-import './rating.css';
-import { FaStar } from "react-icons/fa";
 import axios from "axios";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Rating from '@mui/material/Rating';
+import StarIcon from '@mui/icons-material/Star';
 
-function ratingDes (value : number){
-    var name : string = "";
-    switch (value) {
-      case 1:
-        name = "Pésimo";
-        break;
-      case 2:
-        name = "Malo";
-        break;
-      case 3:
-        name = "Regular";
-        break;
-      case 4:
-        name = "Bueno";
-        break;
-      case 5:
-        name = "Excelente";
-        break;
-      default:
-        break;
-    }
-    return (name);
-}
+const labels: { [index: string]: string } = {
+  1: 'Pésimo',
+  2: 'Malo',
+  3: 'Regular',
+  4: 'Bueno',
+  5: 'Excelente',
+};
+
+const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app";
 
 function updateUserCalif(inputValue:number){
-    return axios.post("https://general-api-f6ljpbkkwa-uc.a.run.app;", {
+    return axios.post(uriGraphql, {
         query:` mutation UserCalifInput($input: UserCalifInput) {
             createUserCalif(input: $input)
             } `,
@@ -44,39 +35,59 @@ function updateUserCalif(inputValue:number){
 
    
 const rating: React.FC = () => {
-    const [currentValue, setCurrentValue] = useState(0);
-    const [hoverValue, setHoverValue] = useState(0);
+    const [currentValue, setCurrentValue] = useState<number>(3);
+    const [hoverValue, setHoverValue] = useState(-1);
   
     return (
-      <div className="container">
-        <h2> Calificación </h2>
-        <p>Por favor selecciona una calificación en la escala de 1 a 5 estrellas.</p>
-        <div className="stars">
-          {[...Array(5)].map((_star, i) => {
-            const ratingValue = i + 1;
-            return (
-              <label>
-                <input type="radio" 
-                name="rating" 
-                value={ratingValue}
-                onClick={() => setCurrentValue(ratingValue)} 
-                />
-                <FaStar className="star"
-                  size={30}
-                  color = {ratingValue <= (hoverValue || currentValue)? "#ff9933" : "#6c6c6c"} 
-                  onMouseOver={() => setHoverValue(ratingValue)}
-                  onMouseOut={() => setHoverValue(0)}
-                />
-              </label>
-            )
-          })}
-        </div>
-        <p>{ratingDes(currentValue)}</p>
-  
-        <button id="botonx" onClick={() => updateUserCalif(currentValue)}>
-          Enviar
-        </button>
-      </div>
+      <Box
+        sx={{
+            width: '98.9vw',
+            height: '100vh',
+            overflow: 'hidden'
+        }}
+      >
+        <Container component="main" maxWidth="xs" sx={{marginTop: 8, py: 6}}>
+          <CssBaseline />
+          <Box
+            sx={{
+                px: 8,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
+          >
+            <Typography component="h1" variant="inherit">Calificación</Typography>
+            <Typography component="h4" variant="subtitle1" sx={{mt: 2}}>
+              Por favor selecciona una calificación en la escala de 1 a 5 estrellas.
+            </Typography>
+            <Rating
+              sx={{mt: 2}}
+              value={currentValue}
+              precision={1}
+              size="large"
+              onChange={(event, newValue) => {
+                newValue !== null
+                ? setCurrentValue(newValue)
+                : setCurrentValue(3)
+              }}
+              onChangeActive={(event, newHover) => {
+                setHoverValue(newHover);
+              }}
+              icon={<StarIcon sx={{fontSize: 40, color: "#ff9933"}} />}
+              emptyIcon={<StarIcon style={{ opacity: 0.55 }} sx={{fontSize: 40}} />}
+            />
+            
+            {currentValue !== null && (
+              <Box sx={{ ml: 2, mt: 2, mb: 4 }}>{labels[hoverValue !== -1 ? hoverValue : currentValue]}</Box>
+            )}
+      
+            <Button variant="contained" fullWidth onClick={() => updateUserCalif(currentValue)}>
+              Enviar calificación
+            </Button>
+
+          </Box>
+        </Container>
+      </Box>
     );
 }
 
