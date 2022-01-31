@@ -1,6 +1,17 @@
 import React from 'react'
 import { GoogleMap, LoadScript , Autocomplete, DirectionsService, DirectionsRenderer, Marker} from '@react-google-maps/api';
 import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CssBaseline from '@mui/material/CssBaseline';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import UberCar from '../../assets/UberX.png';
+import mapStyle from './MapStyle.json';
 
 interface iTravel{
   origin: string;
@@ -24,22 +35,24 @@ function useForceUpdate(){
 
 
 const options ={
-    streetViewControl: false
+  streetViewControl: false,
+  fullscreenControl:false,
+  mapTypeControl: false,
+  styles: mapStyle,
 };
 
-const inputSyle = {
-  border: `1px solid transparent`,
-  width: `240px`,
-  height: `32px`,
-  padding: `10px 12px 5px 5px`,
-  borderRadius: `3px`,
-  boxShadow: `0 2px 6px rgba(0, 0, 0, 0.3)`,
-  fontSize: `14px`,
-  outline: `none`,
-  textOverflow: `ellipses`,
-  position: "relative",
-  left: "80%",
-  marginLeft: "-120px"
+const cardStyle = {
+  display: 'flex',
+  direction: "row",
+  justifyContent: "space-around",
+  alignItems:"stretch",
+  bgcolor: '#F3F3F3',
+  my: 1.5,
+  transition: '0.3s',
+  "&:hover": {
+    bgcolor: "#E3E3E3",
+    cursor: 'pointer'
+  }
 }
 
 const Maps:React.FC = () => {
@@ -133,47 +146,158 @@ const Maps:React.FC = () => {
     }
 
     return(
-      <>
-      <div className='map container'>
-            
-            <LoadScript googleMapsApiKey="AIzaSyDPCiexFmQYEsMsRne5RlWnNQ0qgABxBWk" libraries={["places"]}>
-            <GoogleMap options={options} onLoad={onLoad} mapContainerStyle={{
-              height: '500px',
-              width: '65%'
-            }} center={center} zoom={10} id='map' > 
-              <Autocomplete onLoad={onLoadOrigin} onPlaceChanged={onPlacesChangedOrigin} >
-              <input type="text" placeholder="Origin" style={inputSyle}   />
-              </Autocomplete>
+      <Box
+        sx={{
+          width: '98.9vw',
+          height: '90vh',
+          overflow: 'hidden',
+          position: "relavite"
+        }}
+      >
+        <CssBaseline />
+        <LoadScript googleMapsApiKey="AIzaSyDPCiexFmQYEsMsRne5RlWnNQ0qgABxBWk" libraries={["places"]}>
+          <GoogleMap options={options} onLoad={onLoad} mapContainerStyle={{
+            height: '100%',
+            width: '100%'
+          }} center={center} zoom={15}> 
 
-              <Autocomplete  onLoad={onLoadDes} onPlaceChanged={onPlacesChangedDes} >
-              <input type="text" placeholder="Destination" style={inputSyle} />
-              </Autocomplete>
+            {/* Pone marcadores donde no debería  */}
+            {/*originPo.lat && (
+              <div>{(originPo.lat !== 0)?(
+                <Marker position={originPo} >
+                </Marker>
+              ):""}</div>
+            )}
+            {desPo.lat && (
+              <div>{(desPo.lat !== 0)?(
+                <Marker position={desPo} >
+                </Marker>
+              ):""}</div>
+              )*/}
 
-              {originPo.lat && (
-                <div>{(originPo.lat !== 0)?(
-                  <Marker position={originPo} >
-                  </Marker>
-                ):""}</div>
-              )}
-              {desPo.lat && (
-                <div>{(desPo.lat !== 0)?(
-                  <Marker position={desPo} >
-                  </Marker>
-                ):""}</div>
-              )}
+            {(travel.origin !== '' && travel.destination !== '') && (
+              <DirectionsService options={travel} callback={directionsCallback} />
+            )}
+            {responseM.response  && (
+              <DirectionsRenderer  options={{directions:responseM.response}}/>
+            )}
 
-              {(travel.origin !== '' && travel.destination !== '') && (
-                <DirectionsService options={travel} callback={directionsCallback} />
-              )}
-              {responseM.response  && (
-                <DirectionsRenderer  options={{directions:responseM.response}}/>
-              )}
-            </GoogleMap>
-        </LoadScript>
-      
-      </div>
-      </>
-        ); 
+          </GoogleMap>
+          <Box
+            component="form"
+            sx={{
+              px: 6,
+              mr: 4,
+              bgcolor: '#FFFFFF',
+              position: 'absolute',
+              top: 110,
+              right: 10,
+              width: '380px',
+              height: '65%',
+              overflow: 'scroll',
+              overflowX: 'hidden'
+            }}
+          >
+            <Autocomplete onLoad={onLoadOrigin} onPlaceChanged={onPlacesChangedOrigin} >
+              <TextField fullWidth sx={{mt: 6}} margin="normal" type="text" label="Origen" />
+            </Autocomplete>
+
+            <Autocomplete onLoad={onLoadDes} onPlaceChanged={onPlacesChangedDes} >
+              <TextField fullWidth margin="normal" type="text" label="Destino" />
+            </Autocomplete>
+
+            <Grid 
+              container
+              direction="column"
+              justifyContent="center"
+              alignItems="center"
+            >
+              {/* Cambiar por un map() cuando se implemente la query sobre los costos según el 
+                  tipo de Uber */}
+              <Grid item sx={{width: '100%'}}>
+                <Card sx={cardStyle} onClick={() => alert("Hola")}>
+                  <CardMedia sx={{p: 1}}>
+                    <img className="uber-car" src={UberCar}/>
+                  </CardMedia>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 500}}>
+                      UberX
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 700}}>
+                      $20.000
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item sx={{width: '100%'}}>
+                <Card sx={cardStyle}>
+                  <CardMedia sx={{p: 1}}>
+                    <img className="uber-car" src={UberCar}/>
+                  </CardMedia>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 500}}>
+                      UberX
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 700}}>
+                      $20.000
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item sx={{width: '100%'}}>
+                <Card sx={cardStyle}>
+                  <CardMedia sx={{p: 1}}>
+                    <img className="uber-car" src={UberCar}/>
+                  </CardMedia>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 500}}>
+                      UberX
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 700}}>
+                      $20.000
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+
+              <Grid item sx={{width: '100%'}}>
+                <Card sx={cardStyle}>
+                  <CardMedia sx={{p: 1}}>
+                    <img className="uber-car" src={UberCar}/>
+                  </CardMedia>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 500}}>
+                      UberX
+                    </Typography>
+                  </CardContent>
+                  <CardContent>
+                    <Typography sx={{pt: 1, fontSize: 16, fontWeight: 700}}>
+                      $20.000
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            </Grid>
+            <Button 
+              fullWidth
+              onClick={() => {}}
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Pedir viaje
+            </Button>
+          </Box>
+        </LoadScript>      
+      </Box>
+    ); 
 }
 
 export default Maps;

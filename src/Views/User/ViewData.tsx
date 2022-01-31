@@ -1,10 +1,21 @@
 import React, { useEffect, useState} from "react";
 import axios from "axios";
-import { Button, Container } from "react-bootstrap";
-import {useSelector} from 'react-redux';
+import { logout } from "@/features/authSlice";
+import {useSelector, useDispatch} from 'react-redux';
 import { RootState } from "@/store";
 import {useNavigate} from 'react-router-dom';
 import DeleteAccount from '../User/DeleteAccount';
+import DefaultImage from '../../assets/default-profile.png';
+import ErrorImage from '../../assets/error-image.png'
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CircularProgress from '@mui/material/CircularProgress';
 
 interface User{
     idClient : number;
@@ -39,7 +50,6 @@ function fetchClient(id:number, token:string){
                 active
                 email
                 telNumber
-                password
                 image
             }
         } `,
@@ -51,13 +61,13 @@ function fetchClient(id:number, token:string){
             'Content-Type': 'application/json',
             'Authorization': `${token}`
         }
-    }).catch(error => console.log(error)
-        );
+    }).catch(error => console.log(error));
 }
 
 const ViewData:React.FC = () =>{
 
     let navigate = useNavigate();
+    let dispatch = useDispatch();
 
     var token = useSelector((state:RootState) => state.auth.user) as string;
     var id = useSelector((state:RootState) => state.auth.id);
@@ -94,7 +104,9 @@ const ViewData:React.FC = () =>{
     }
 
     function goOut(){
-        navigate("/login");
+        dispatch(logout);
+        localStorage.removeItem("token");
+        setTimeout(() => navigate("/addClient"), 3500);
     }
 
     function deleteAccount(){
@@ -105,112 +117,85 @@ const ViewData:React.FC = () =>{
         setStatus({...status, delete: !status.delete});
     }
     return(
-        <div>{(client.active === 1)?(
+        <Box sx={{minHeight: '100vh'}}>
+            {(client.active === 1)?(
             <div>{!status.delete?(
                 <div>{!status.loading?(
-                    <div className="submit-form Delete" id="registro">
-                    
-                        <img className="ima" id="user-imagen" src={client.image} alt="User image"/>
+                    <Container component="main" maxWidth="xs" sx={{py: 6, textAlign: 'center'}}>
+                        <Typography sx={{mb: 4, fontWeight: 400, fontSize: 50, color: "#F30000", letterSpacing: 4}}>
+                            Mi perfil
+                        </Typography>
+                            
+                        {
+                            client.image !== ""
+                            ? <img id="user-image" src={client.image} alt="User image"/>
+                            : <img id="user-image" src={DefaultImage} alt="User image"/>
+                        }
 
-                        <h1 id="tituloR">User Data</h1>
+                        <Box sx={{textAlign: 'left'}}>
+                            <Typography  sx={{mb: 1, fontWeight: 500, fontSize: 20, letterSpacing: 4, }}>
+                                Nombres
+                            </Typography>
+                            <Typography  sx={{mb: 4, fontWeight: 300, fontSize: 20, letterSpacing: 4 }}>
+                                {client.fName} {client.sName !== null? client.sName : ""}
+                            </Typography>
 
-                        <div className="btn-group" role="group" aria-label="Actions">
-                            <Button type="button" className="btn btn-success col-lg " id="botonx" onClick={editData}>Modify Data</Button>
-                            <Button type="button" className="btn btn-secondary col-lg" id="botonx" onClick={goOut}>Go out</Button>
-                            <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={deleteAccount}>Delete Account</Button>
-                        </div>
+                            <Typography  sx={{mb: 1, fontWeight: 500, fontSize: 20, letterSpacing: 4, }}>
+                                Apellidos
+                            </Typography>
+                            <Typography  sx={{mb: 4, fontWeight: 300, fontSize: 20, letterSpacing: 4 }}>
+                                {client.sureName}
+                            </Typography>
 
-                        <div className="form-group">
-                            <h3>Name</h3>
-                            <h4>{client.fName}</h4>
-                        </div>
+                            <Typography  sx={{mb: 1, fontWeight: 500, fontSize: 20, letterSpacing: 4, }}>
+                                Número de teléfono
+                            </Typography>
+                            <Typography  sx={{mb: 4, fontWeight: 300, fontSize: 20, letterSpacing: 4 }}>
+                                {client.telNumber}
+                            </Typography>
 
-                        <div className="form-group">
-                            <h3>Second name</h3>
-                            <h4>{client.sName}</h4>
-                        </div>
+                            <Typography  sx={{mb: 1, fontWeight: 500, fontSize: 20, letterSpacing: 4, }}>
+                                Email
+                            </Typography>
+                            <Typography  sx={{mb: 4, fontWeight: 300, fontSize: 20, letterSpacing: 4 }}>
+                                {client.email}
+                            </Typography>
+                        </Box>
 
-                        <div className="form-group">
-                            <h3>Sure name</h3>
-                            <h4>{client.sureName}</h4>
-                        </div>
+                        <Stack spacing={3} direction="row" sx={{my: 6}}>
+                            <Button
+                                fullWidth
+                                variant="contained" 
+                                startIcon={<EditIcon />} 
+                                onClick={editData}
+                            >
+                                Editar perfil
+                            </Button>
 
-                        <div className="form-group">
-                            <h3>Tel number</h3>
-                            <h4>{client.telNumber}</h4>
-                        </div>
+                            <Button
+                                fullWidth
+                                variant="outlined" 
+                                startIcon={<DeleteIcon />} 
+                                onClick={deleteAccount}
+                            >
+                                Eliminar cuenta
+                            </Button>
+                        </Stack>
 
-                        <div className="form-group" id="emailc">
-                            <h3>Email</h3>
-                            <h4>{client.email}</h4>
-                        </div>
 
-                   {/* <div className="row">    
-                    <div className="col-6" > 
-                    <h1></h1>
-                    <div className="container">
-                        <div className="row">
-                            <div className="col-md">
-                                <h3>Name</h3>
-                            </div>
-                            <div className="col-md">
-                                <p>{client.fName}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md">
-                                <h3>Second name</h3>
-                            </div>
-                            <div className="col-md">
-                                <p>{client.sName}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md">
-                                <h3>Sure name</h3>
-                            </div>
-                            <div className="col-md">
-                                <p>{client.sureName}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md">
-                                <h3>email</h3>
-                            </div>
-                            <div className="col-md">
-                                <p>{client.email}</p>
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-md">
-                                <h3>Tel number</h3>
-                            </div>
-                            <div className="col-md">
-                                <p>{client.telNumber}</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="btn-group" role="group" aria-label="Actions">
-                        <Button type="button" className="btn btn-success col-lg " onClick={editData}>Modify Data</Button>
-                        <Button type="button" className="btn btn-secondary col-lg" onClick={goOut}>Go out</Button>
-                        <Button type="button" className="btn btn-danger col-lg" onClick={deleteAccount}>Delete Account</Button>
-                    </div>
-            </div>
-            <div className="col-6">
-                <h2>User image</h2>
-                <div className="container">
-                    <img src={client.image} alt="User image" className="img-thumbnail" />
-                </div>
-                </div>
-            </div>*/}
-            </div>
+                        
+                    </Container>
                 ):(
-                    <div>
-                        <Container>
-                            <h1>We are working</h1>
-                            <img src="https://bestanimations.com/Science/Gears/gears-animated.gif" alt="Estamos cargando la infomración" />
-                        </Container>
-                    </div>
+                    <Box 
+                        sx={{ 
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            marginTop: 10
+                        }}
+                    >
+                        <CircularProgress />
+                    </Box>
                 )}
             </div>
             ):(
@@ -218,16 +203,22 @@ const ViewData:React.FC = () =>{
             )}
             </div> 
         ):(
-            <>
-            <h1>User has desactive the account, please go to th following link: </h1>
-            <h2><a href="https://i.pinimg.com/736x/58/e2/8f/58e28fae02def3695760602649056285.jpg"> Restore Account</a></h2>
-            <div className="container">
-                <h2>Or go back</h2>
-                <Button type="button" className="btn btn-secondary col-lg" onClick={goOut}> Go back to the login </Button>
-            </div>
-            </>
+            <Container component="main" maxWidth="sm" sx={{py: 5, textAlign: 'center'}}>
+                <CssBaseline />
+                <img id="error-image" src={ErrorImage} />
+                <Typography component="h1" variant="h4" sx={{mb: 4}}>
+                    Oops, parece que ya has desactivado tu cuenta
+                </Typography>
+                <Button 
+                    onClick={goOut}
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, px: 6 }}
+                >
+                    Crea una nueva cuenta
+                </Button>
+            </Container>
         )}
-        </div>    
+        </Box>  
     );
 }
 

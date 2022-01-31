@@ -225,7 +225,7 @@ const creditCardInfo: React.FC = () => {
     }
 
     return (
-        <>
+        <Box sx={{minHeight: '85vh'}}>
             <Container component="main" maxWidth="xs">
             <CssBaseline />
             <Box
@@ -315,7 +315,7 @@ const creditCardInfo: React.FC = () => {
                 </Box>
             </Box>
             </Container>
-        </>
+        </Box>
     );
 }
 

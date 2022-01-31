@@ -1,10 +1,25 @@
 import React, { useEffect, useState} from "react";
+import { useUpdateEffect } from "react-use";
 import axios from "axios";
-import { Button, Container } from "react-bootstrap";
-import {useSelector} from 'react-redux';
+import { logout } from "@/features/authSlice";
+import { useSelector, useDispatch} from 'react-redux';
 import { RootState } from "@/store";
 import {useNavigate} from 'react-router-dom';
 import FileUpload from "@/Views/User/FileUpload";
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Grid from '@mui/material/Grid';
+import Modal from '@mui/material/Modal';
+import Stack from '@mui/material/Stack';
+import EditIcon from '@mui/icons-material/Edit';
+import CircularProgress from '@mui/material/CircularProgress';
+import ErrorImage from '../../assets/error-image.png';
+import DefaultImage from '../../assets/default-profile.png';
+import Alert from '@mui/material/Alert';
 
 interface User{
     id: number
@@ -28,6 +43,20 @@ interface Loading{
     image: boolean;
     loadImage: boolean;
     loadedImage: boolean;
+}
+
+interface Toast{
+    state: boolean,
+    message: string
+}
+
+interface FormErrors{
+    name: boolean,
+    sureName: boolean,
+    phoneNumber: boolean,
+    email: boolean,
+    password: boolean,
+    confirmPassword: boolean
 }
 
 const uriGraphql = "https://general-api-f6ljpbkkwa-uc.a.run.app";
@@ -88,7 +117,7 @@ function updateClient(id:number, token:string, client:User){
 }
 
 function changePass(id:number, token:string, client:User){
-    return axios.post(apilocal, {
+    return axios.post(uriGraphql, {
         query:` mutation UpdatePassword($idClient: Int!, $client: ChangePasswordInput!) {
             updatePassword(idClient: $idClient, client: $client) {
             response
@@ -119,6 +148,7 @@ function changePass(id:number, token:string, client:User){
 const EditData:React.FC = () =>{
 
     let navigate = useNavigate();
+    let dispatch = useDispatch();
 
     var token = useSelector((state:RootState) => state.auth.user) as string;
     var id = useSelector((state:RootState) => state.auth.id);
@@ -148,7 +178,31 @@ const EditData:React.FC = () =>{
             client.image = clientFe.image;
             setStatus({ ...status , loading :false});
         })
-        }, []);
+    }, []);
+
+    const [formValidationError, setFormValidationError] = useState<FormErrors>({
+        name: false,
+        sureName: false,
+        phoneNumber: false,
+        email: false,
+        password: false,
+        confirmPassword: false
+    });	
+
+    const [toastSuccess, setToastSuccess] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+    const [toastError, setToastError] = useState<Toast>({
+        state: false,
+        message: ""
+    });
+
+    function goOut(){
+        dispatch(logout);
+        localStorage.removeItem("token");
+        setTimeout(() => navigate("/addClient"), 3500);
+    }
 
 
     function goBack(){
@@ -222,28 +276,40 @@ const EditData:React.FC = () =>{
     }
 
     function saveChanges(){
-        setStatus({ ...status , loading :true });
+        //setStatus({ ...status , loading :true });
         updateClient(id, token, client).then((data) =>{
-            setStatus({ ...status , loading :false });
+            //setStatus({ ...status , loading :false });
             if(data.data.data.updateClient === '200'){
-                alert("Your data have been succesfully changed");
-                navigate('/viewData');
+                setToastSuccess({
+                    state: true,
+                    message: "Información actualizada correctamente"
+                });
+                setTimeout(() => navigate("/viewData"), 2500);
             }else{
-                alert("Email or number have already been registered");
+                setToastError({
+                    state: true,
+                    message: "El email o número de teléfono ya se encuentran registrados."
+                });
             }
         });
     }
 
     function chPassword(){
-        setStatus({ ...status , loading :true });
+        //setStatus({ ...status , loading :true });
         changePass(id, token, client).then((data) =>{
-            setStatus({ ...status , loading :false });
+            //setStatus({ ...status , loading :false });
             console.log(data);
             if(data.data.data.updatePassword.response === 'Password Changed'){
-                alert("Your password have been changed succesfully");
-                navigate('/viewData');
+                setToastSuccess({
+                    state: true,
+                    message: "Cambio de contraseña realizado"
+                });
+                setTimeout(() => navigate("/viewData"), 2500);
             }else{
-                alert(data.data.data.updatePassword.response);
+                setToastError({
+                    state: true,
+                    message: "Error al cambiar la contraseña"
+                });
             }
         });
     }
@@ -267,285 +333,331 @@ const EditData:React.FC = () =>{
         setStatus({...status, image:!(status.image)});
     }
 
+    useUpdateEffect(() => {
+        if (checkName()) {
+            setFormValidationError({...formValidationError, name: true});
+        } else {
+            setFormValidationError({...formValidationError, name: false});
+        }
+    }, [client.fName]);
+
+    useUpdateEffect(() => {
+        if (!checkSureN()) {
+            setFormValidationError({...formValidationError, sureName: true});
+        } else {
+            setFormValidationError({...formValidationError, sureName: false});
+        }
+    }, [client.sureName]);
+
+    useUpdateEffect(() => {
+        if (checkNumber()) {
+            setFormValidationError({...formValidationError, phoneNumber: true});
+        } else {
+            setFormValidationError({...formValidationError, phoneNumber: false});
+        }
+    }, [client.telNumber]);
+
+    useUpdateEffect(() => {
+        if (checkEmail()) {
+            setFormValidationError({...formValidationError, email: true});
+        } else {
+            setFormValidationError({...formValidationError, email: false});
+        }
+    }, [client.email]);
+
+    useUpdateEffect(() => {
+        if (checkPass()) {
+            setFormValidationError({...formValidationError, password: true});
+        } else {
+            setFormValidationError({...formValidationError, password: false});
+        }
+    }, [client.newPassword]);
+
+    useUpdateEffect(() => {
+        if (checkRePass()) {
+            setFormValidationError({...formValidationError, confirmPassword: true});
+        } else {
+            setFormValidationError({...formValidationError, confirmPassword: false});
+        }
+    }, [client.reNewPassword]);
+
     return(
-        <div>{client.active===1?(
+        <Box sx={{minHeight: '100vh'}}>
+            {client.active===1?(
             <div>{!status.loading?(
-                <div className="submit-form registro2" id="registro">
-                    
-                    <h1 id="tituloR">Edit User Data</h1>
-
-                    <div className="foto">
-                        {/*<h2 id="tituloR">User image</h2>*/}
-                        <div>{!status.image?(
-                            <div>
-                                <img className="ima" id="user-imagen" src={client.image} alt="User image"/>
-                            <div className="container">
-                                <button type="button" className="btn btn-warning col-lg" id="botonx" onClick={changeImageBu}>Change Picture</button>
-                            </div>
-                        </div>
-                        ):(
-                            <div className="file">
-                                <FileUpload token={token} setImageUrl={setImageUrl}/>
-                            </div>
-                        )}</div>
-                    </div>
-
-                    <div className="form-group ff">
-                        <label htmlFor="fName">First Name *</label>
-                        <input type="text" className="form-control" id="fname" required value={client.fName}
-                        onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
-
-                        <div>{checkName()?(
-                            <Container>
-                                <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="sName">Second Name</label>
-                        <input type="text" className="form-control" id="sName" value={client.sName}
-                        onChange={e => setClient({...client, sName: e.target.value})}  onInput={checkSName} name="sName" />
-            
-                        <div>{checkSName()?(
-                            <Container>
-                                <p>Second Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="sureName">Sure Name * </label>
-                        <input type="text" className="form-control" id="sureName" required value={client.sureName}
-                        onChange={e => setClient({...client, sureName: e.target.value})} onInput={checkSureN} name="sureName" />
-            
-                        <div>{!checkSureN()?(
-                            <Container>
-                                <p>Sure name must be at most 3 words and at least with 3 or more characters each one</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-
-                    <div className="form-group">
-                        <label htmlFor="telNumber">Tel Number * </label>
-                        <input type="number" className="form-control" id="telNumber" required value={client.telNumber}
-                        onChange={e => setClient({...client, telNumber: e.target.value})} onInput={checkNumber} name="telNumber" />
-                        <div>{checkNumber()?(
-                            <Container>
-                                <p>It must be a movil telephone number</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-
-                    <div className="form-group" id="emailc">
-                        <label htmlFor="email">Email * </label>
-                        <input type="text" className="form-control" id="email" required value={client.email}
-                        onChange={e => setClient({...client, email: e.target.value})} onInput={checkEmail} name="email" />
-
-                    <div>{checkEmail()?(
-                        <Container>
-                            <p>Type your email</p>
-                        </Container>
-                    ):""}</div>
-                    </div>
-
-                    <div className="btn-group btn-group2" role="group" aria-label="Actions">
-                        <div>{checkFields()?(
-                                <Button type="button" className="btn btn-success col-lg" id="botonx" onClick={saveChanges}>Save Changes</Button>
-                            ):""}
-                        </div>
-                        <Button type="button" className="btn btn-secondary col-lg" id="botonx" onClick={goBack}>Go Back</Button>
-                    </div>
-
-                    <div id="cambio">{status.password?(
-                        <div className="container">
+                <Container component="main" maxWidth="sm">
+                    <CssBaseline />
+                    <Box
+                        sx={{
+                            mt: 4,
+                            mb: 8,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                        }}
+                    >
                         
-                            <div className="form-group">
-                                <label htmlFor="password">Current Password *</label>
-                                <input type="password" className="form-control" id="password" required value={client.password}
-                                onChange={e => setClient({...client, password: e.target.value})}  name="password" />
-                            </div>
-                            
-                            <div className="form-group">
-                                <label htmlFor="password">New Password</label>
-                                <input type="password" className="form-control" id="newPassword" required value={client.newPassword}
-                                onChange={e => setClient({...client, newPassword: e.target.value})} onInput={checkPass} name="newPassword" />
-                            </div>
-                            
-                            <div>{checkPass()?(
-                                <Container>
-                                    <p>Password must have at least 8 characters and at most 15, no spaces.</p>
-                                </Container>
-                            ):""}</div>
-        
-                            <div className="form-group">
-                                <label htmlFor="password">Repeat new  Password *</label>
-                                <input type="password" className="form-control" id="reNewPassword" required value={client.reNewPassword}
-                                onChange={e => setClient({...client, reNewPassword: e.target.value})} onInput={checkRePass} name="reNewPassword" />
-                            </div>
+                        <Typography sx={{mb: 4, fontWeight: 400, fontSize: 40, color: "#F30000", letterSpacing: 4}}>
+                            Editar perfil
+                        </Typography>
 
-                            <div>{checkRePass()?(
-                                <Container>
-                                    <p>The two passwords must match</p>
-                                </Container>
-                            ):""}</div>
-
-                            <div id="salto">
-                                <div>
-                                    {testPasswords()?(
-                                        <Button type="button" className="btn btn-succes col-lg" id="botonx" onClick={chPassword}>Change Password and data</Button>
-                                    ):""}
-                                </div>
-                                <Button type="button" className="btn btn-danger col-lg" id="botonx" onClick={cancelPassword}>Cancel</Button>
-                            </div>
-                        </div>
+                        <>
+                            {!status.image?(
+                                <>
+                                    {
+                                        client.image !== ""
+                                        ? <img id="user-image" src={client.image} alt="User image"/>
+                                        : <img id="user-image" src={DefaultImage} alt="User image"/>
+                                    }
+                                    
+                                    <Button variant="outlined" onClick={changeImageBu}>Change Picture</Button>
+                                   
+                                </>
                             ):(
-                                <Button type="button" className="btn btn-info col-lg" id="botonx" onClick={chPasswordBu}>ChangePassword</Button>
+                                <div className="file">
+                                    <FileUpload token={token} setImageUrl={setImageUrl}/>
+                                </div>
                             )}
-                        </div>
+                        </>
 
+                        <Box component="form" sx={{mt:3}}>
+                            <Grid container spacing={2}> 
+                                <Grid item sm={6}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        type="text"
+                                        label="Nombre"
+                                        variant="outlined"
+                                        value={client.fName}
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={e => setClient({...client, fName: e.target.value})}
+                                        error={formValidationError.name}
+                                        helperText={
+                                            formValidationError.name
+                                            ? "El nombre no es válido"
+                                            : ""
+                                        }
+                                    />
+                                </Grid>
 
+                                <Grid item sm={6}>
+                                    <TextField
+                                        margin="normal"
+                                        fullWidth
+                                        type="text"
+                                        label="Segundo nombre"
+                                        variant="outlined"
+                                        value={client.sName}
+                                        onChange={e => setClient({...client, sName: e.target.value})}
+                                        error={checkSName()}
+                                        helperText={
+                                            checkSName()
+                                            ? "El segundo nombre no es válido"
+                                            : ""
+                                        }
+                                    />
+                                </Grid>
 
-                {/*<div className="row">    
-                <div className="col-6" > 
-                
-                <div className="container">
-                    <div className="row">
-                    
-                    <div className="form-group">
-                        <label htmlFor="fName">First Name *</label>
-                        <input type="text" className="form-control" id="fname" required value={client.fName}
-                        onChange={e => setClient({...client, fName: e.target.value})} onInput={checkName} name="fName" />
-                    </div>
-                    <div>{checkName()?(
-                        <Container>
-                            <p>Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                        </Container>
-                    ):""}</div>
-                    </div>
+                                <Grid item sm={6}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        type="text"
+                                        label="Apellidos"
+                                        variant="outlined"
+                                        value={client.sureName}
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={e => setClient({...client, sureName: e.target.value})}
+                                        error={formValidationError.sureName}
+                                        helperText={
+                                            formValidationError.sureName
+                                            ? "Los apellidos no son válidos"
+                                            : ""
+                                        }
+                                    />
+                                </Grid>
 
+                                <Grid item sm={6}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        type="number"
+                                        label="Numero de teléfono"
+                                        variant="outlined"
+                                        value={client.telNumber}
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={e => setClient({...client, telNumber: e.target.value})}
+                                        error={formValidationError.phoneNumber}
+                                        helperText={
+                                            formValidationError.phoneNumber
+                                            ? "El número de teléfono no es válido"
+                                            : ""
+                                        }
+                                    />
+                                </Grid>
 
-                    <div className="row">
-                        <div className="form-group">
-                        <label htmlFor="sName">Second Name</label>
-                        <input type="text" className="form-control" id="sName" value={client.sName}
-                        onChange={e => setClient({...client, sName: e.target.value})}  onInput={checkSName} name="sName" />
-                    </div>
-                    <div>{checkSName()?(
-                        <Container>
-                            <p>Second Name Must be a word without numbers nor spetial characters, with 3 or more characters</p>
-                        </Container>
-                    ):""}</div>
-                    </div>
-                    <div className="row">
-                        <div className="form-group">
-                            <label htmlFor="sureName">Sure Name * </label>
-                            <input type="text" className="form-control" id="sureName" required value={client.sureName}
-                            onChange={e => setClient({...client, sureName: e.target.value})} onInput={checkSureN} name="sureName" />
-                        </div>
-                        <div>{!checkSureN()?(
-                            <Container>
-                                <p>Sure name must be at most 3 words and at least with 3 or more characters each one</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-                    <div className="row">
-                        <div className="form-group">
-                            <label htmlFor="email">Email * </label>
-                            <input type="text" className="form-control" id="email" required value={client.email}
-                            onChange={e => setClient({...client, email: e.target.value})} onInput={checkEmail} name="email" />
-                        </div>
-                        <div>{checkEmail()?(
-                            <Container>
-                                <p>Type your email</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-                    <div className="row">
-                        <div className="form-group">
-                            <label htmlFor="telNumber">Tel Number * </label>
-                            <input type="number" className="form-control" id="telNumber" required value={client.telNumber}
-                            onChange={e => setClient({...client, telNumber: e.target.value})} onInput={checkNumber} name="telNumber" />
-                        </div>
-                        <div>{checkNumber()?(
-                            <Container>
-                                <p>It must be a movil telephone number</p>
-                            </Container>
-                        ):""}</div>
-                    </div>
-                </div>
-                <div className="btn-group" role="group" aria-label="Actions">
-                    <div>{checkFields()?(
-                            <Button type="button" className="btn btn-success col-lg" onClick={saveChanges}>Save Changes</Button>
-                        ):""}
-                    </div>
-                    <Button type="button" className="btn btn-secondary col-lg" onClick={goBack}>Go Back</Button>
-                </div>
-                
-                <div>{status.password?(
-                        <div className="container">
-                        <div className="form-group">
-                            <label htmlFor="password">Current Password *</label>
-                            <input type="password" className="form-control" id="password" required value={client.password}
-                            onChange={e => setClient({...client, password: e.target.value})}  name="password" />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="password">New Password</label>
-                            <input type="password" className="form-control" id="newPassword" required value={client.newPassword}
-                            onChange={e => setClient({...client, newPassword: e.target.value})} onInput={checkPass} name="newPassword" />
-                        </div>
-                        <div>{checkPass()?(
-                            <Container>
-                                <p>Password must have at least 8 characters and at most 15, no spaces.</p>
-                            </Container>
-                        ):""}</div>
-    
-                        <div className="form-group">
-                                <label htmlFor="password">Repeat new  Password *</label>
-                                <input type="password" className="form-control" id="reNewPassword" required value={client.reNewPassword}
-                                onChange={e => setClient({...client, reNewPassword: e.target.value})} onInput={checkRePass} name="reNewPassword" />
-                        </div>
-                        <div>{checkRePass()?(
-                            <Container>
-                                <p>The two passwords must match</p>
-                            </Container>
-                        ):""}</div>
-                        <div>
-                            <div>
-                                {testPasswords()?(
-                                    <Button type="button" className="btn btn-succes col-lg" onClick={chPassword}>Change Password and data</Button>
-                                ):""}
-                            </div>
-                        <Button type="button" className="btn btn-danger col-lg" onClick={cancelPassword}>Cancel</Button>
-                        </div>
-                    </div>
-                    ):(
-                        <Button type="button" className="btn btn-info col-lg" onClick={chPasswordBu}>ChangePassword</Button>
-                    )}
-                </div>
-                
+                                <Grid item sm={12}>
+                                    <TextField
+                                        margin="normal"
+                                        required
+                                        fullWidth
+                                        type="email"
+                                        label="Correo electrónico"
+                                        variant="outlined"
+                                        value={client.email}
+                                        InputLabelProps={{ shrink: true }}
+                                        onChange={e => setClient({...client, email: e.target.value})}
+                                        error={formValidationError.email}
+                                        helperText={
+                                            formValidationError.email
+                                            ? "El correo electrónico no es válido."
+                                            : ""
+                                        }
+                                    />
+                                </Grid>
+                            </Grid>
 
-        </div>
-        
+                            <>
+                            {status.password?(
+                                
+                                <Grid container spacing={2} sx={{mt: 4}}>
+                                    <Grid item sm={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            label="Contraseña actual"
+                                            variant="outlined"
+                                            onChange={e => setClient({...client, password: e.target.value})}
+                                        />
+                                    </Grid>
 
-        </div>*/}
-        </div>
+                                    <Grid item sm={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            label="Nueva contraseña"
+                                            variant="outlined"
+                                            onChange={e => setClient({...client, newPassword: e.target.value})}
+                                            error={formValidationError.password}
+                                            helperText={
+                                                formValidationError.password
+                                                ? "La contraseña debe contener entre 8 y 15 carácteres sin espacios."
+                                                : ""
+                                            }
+                                        />
+                                    </Grid>
+
+                                    <Grid item sm={12}>
+                                        <TextField
+                                            required
+                                            fullWidth
+                                            type="password"
+                                            label="Repita la nueva contraseña"
+                                            variant="outlined"
+                                            onChange={e => setClient({...client, reNewPassword: e.target.value})}
+                                            error={formValidationError.confirmPassword}
+                                            helperText={
+                                                formValidationError.confirmPassword
+                                                ? "Las contraseñas no coínciden."
+                                                : ""
+                                            }
+                                        />
+                                    </Grid>
+
+                                    <Grid item sm={12}>
+                                        <Stack spacing={3} direction="row" sx={{my: 2}}>
+                                            <Button
+                                                fullWidth
+                                                onClick={chPassword}
+                                                variant="contained"
+                                                disabled = {!testPasswords()}
+                                            >
+                                                Cambiar contraseña y datos
+                                            </Button>
+
+                                            <Button
+                                                fullWidth
+                                                onClick={cancelPassword}
+                                                variant="outlined"
+                                            >
+                                                Cancelar
+                                            </Button>
+                                        </Stack>
+                                    </Grid>
+                                </Grid>
+                            ):(
+                                <>
+                                    <Button sx={{mt: 4}} fullWidth variant="outlined" onClick={chPasswordBu}>Cambiar contraseña</Button>
+                                    <Stack spacing={3} direction="row" sx={{mt: 6, mb: 2}}>
+                                        <Button
+                                            fullWidth
+                                            onClick={saveChanges}
+                                            variant="contained"
+                                            disabled = {!checkFields()}
+                                        >
+                                            Guardar cambios
+                                        </Button>
+
+                                        <Button
+                                            fullWidth
+                                            onClick={goBack}
+                                            variant="outlined"
+                                        >
+                                            Cancelar
+                                        </Button>
+                                    </Stack>
+                                </>
+                            )}
+                            </>
+                            {
+                                toastSuccess.state
+                                ? <Alert sx={{mb: 10}} variant="filled" severity="success">{toastSuccess.message}</Alert>
+                                : null
+                            }
+
+                            {
+                                toastError.state
+                                ? <Alert sx={{mb: 10}} variant="filled" severity="error">{toastError.message}</Alert>
+                                : null
+                            }
+                        </Box>
+                    </Box>          
+                </Container>
             ):(
-                <div>
-                    <Container>
-                        <h1>We are working</h1>
-                        <img src="https://bestanimations.com/Science/Gears/gears-animated.gif" alt="Estamos cargando la infomración" />
-                    </Container>
-                    
-                </div>
+                <Box 
+                    sx={{ 
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        marginTop: 10
+                    }}
+                >
+                    <CircularProgress />
+                </Box>
             )}
         </div>
         ):(
-            <>
-            <h1>User has desactive the account, please go to th following link: </h1>
-            <h2><a href="https://i.pinimg.com/736x/58/e2/8f/58e28fae02def3695760602649056285.jpg"> Restore Account</a></h2>
-            </>
-        )}</div>
+            <Container component="main" maxWidth="sm" sx={{py: 5, textAlign: 'center'}}>
+                <CssBaseline />
+                <img id="error-image" src={ErrorImage} />
+                <Typography component="h1" variant="h4" sx={{mb: 4}}>
+                    Oops, parece que ya has desactivado tu cuenta
+                </Typography>
+                <Button 
+                    onClick={goOut}
+                    variant="contained"
+                    sx={{ mt: 3, mb: 2, px: 6 }}
+                >
+                    Crea una nueva cuenta
+                </Button>
+            </Container>
+        )}</Box>
     );
 }
 

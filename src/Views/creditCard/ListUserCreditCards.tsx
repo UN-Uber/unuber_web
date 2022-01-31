@@ -1,6 +1,6 @@
 import React, { useEffect, useState }from "react";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import List from '@mui/material/List';
@@ -10,18 +10,16 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import Icon from '@mui/material/Icon';
-import visaIcon from '../../../assets/visa_icon.png';
-import mastercardIcon from '../../../assets/mastercard_icon.png';
+import visaIcon from '../../assets/visa_icon.png';
+import mastercardIcon from '../../assets/mastercard_icon.png';
 import PaymentsIcon from '@mui/icons-material/Payments';
-import { green, grey } from '@mui/material/colors';
+import { green } from '@mui/material/colors';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
 import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
-import './ListUserCreditCards.css';
-import CreditCardInfo from "../CreditCardInfo";
 
 interface CreditCard{
     idCard: number,
@@ -66,7 +64,7 @@ function cardIcon(cardNumber: string){
         return (
             <>
                 <Icon>
-                    <img className="imageIcon" src={visaIcon} />
+                    <img className="listCardIcon" src={visaIcon} />
                 </Icon>
             </>
         );
@@ -78,7 +76,7 @@ function cardIcon(cardNumber: string){
         return (
             <>
                 <Icon>
-                    <img className="imageIcon" src={mastercardIcon} />
+                    <img className="listCardIcon" src={mastercardIcon} />
                 </Icon>
             </>
         );
@@ -111,7 +109,7 @@ const GetCreditCards: React.FC = () => {
     
 
     return (
-        <>  
+        <Box sx={{minHeight: '85vh', position: 'relative',}}> 
             <Container component="main" maxWidth="md">
             <CssBaseline />
                 {!status.loading
@@ -184,7 +182,7 @@ const GetCreditCards: React.FC = () => {
                     <Fab variant="extended" color="primary"
                         sx={{
                             position: 'absolute',
-                            bottom: 16,
+                            bottom: 150,
                             right: 16,
                         }}
                         href="/addCreditCard"
@@ -200,14 +198,15 @@ const GetCreditCards: React.FC = () => {
                         sx={{ 
                             display: 'flex',
                             flexDirection: 'column',
-                            alignItems: 'center', 
+                            alignItems: 'center',
+                            marginTop: 10
                         }}
                     >
                         <CircularProgress />
                     </Box>
                 )}
             </Container>
-        </>
+        </Box>
     );
 
 }
