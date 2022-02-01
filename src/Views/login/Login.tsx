@@ -83,7 +83,7 @@ const Login: React.FC = () => {
             }else{
                 localStorage.setItem("token", result.data.data.login.token);
                 dispatch(loginSucess({user : result.data.data.login.token, id: jwt_decode<Token>(result.data.data.login.token).id}));
-                navigate("/viewData");
+                navigate("/home");
             }
         });
     }
